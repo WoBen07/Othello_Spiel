@@ -29,6 +29,7 @@
 Field 
 -
 -occupation: Occupation
+-isSelected: Boolean = false
 -
 </panel_attributes>
     <additional_attributes/>
