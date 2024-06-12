@@ -21,15 +21,19 @@
       <x>640</x>
       <y>380</y>
       <w>270</w>
-      <h>140</h>
+      <h>190</h>
     </coordinates>
     <panel_attributes>&lt;&lt;datatype&gt;&gt;
 Field 
 -
--occupation: Occupation
--isSelected: Boolean = false
+-occupation: Occupation = NONE;
+-selected: Boolean = false
 -
-setOccupation(occupation: Occupation)</panel_attributes>
++Field()	
+-setOccupation(occupation: Occupation)
+-isSelected(): Boolean
+-select()
+-deselect()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -91,9 +95,10 @@ setOccupation(occupation: Occupation)</panel_attributes>
     </coordinates>
     <panel_attributes>Board
 -
--begin: Field [64..64] {readOnly}
 -isBlacksTurn: Boolean
 -
++Board()
+-deselectAll()
 -getLegalMoves: Integer
 -onSelected()</panel_attributes>
     <additional_attributes/>
@@ -120,7 +125,7 @@ setOccupation(occupation: Occupation)</panel_attributes>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-&gt;
-m2=-board</panel_attributes>
+m2=-board {readOnly}</panel_attributes>
     <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
   </element>
   <element>
@@ -139,18 +144,18 @@ m2=-board</panel_attributes>
     <coordinates>
       <x>740</x>
       <y>240</y>
-      <w>200</w>
+      <w>150</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-&gt;
-m2=-fields: Field [64..64] = begin</panel_attributes>
+m2=-fields: Field [64..64]</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>610</x>
-      <y>560</y>
+      <x>620</x>
+      <y>600</y>
       <w>210</w>
       <h>100</h>
     </coordinates>
