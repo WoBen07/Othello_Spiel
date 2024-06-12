@@ -11,10 +11,8 @@
     </coordinates>
     <panel_attributes>OthelloGUI
 -
--isBlacksTurn: Boolean
 -
-+OthelloGUI
--turn()</panel_attributes>
++OthelloGUI</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -94,9 +92,10 @@ setOccupation(occupation: Occupation)</panel_attributes>
     <panel_attributes>Board
 -
 -begin: Field [64..64] {readOnly}
+-isBlacksTurn: Boolean
 -
 -getLegalMoves: Integer
--flip()</panel_attributes>
+-onSelected()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
