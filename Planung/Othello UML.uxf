@@ -96,8 +96,7 @@ Field
 -begin: Field [64..64] {readOnly}
 -
 -getLegalMoves: Integer
--flip()
-+actionPerformed()</panel_attributes>
+-flip()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -163,29 +162,5 @@ NONE
 BLACK
 WHITE</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>940</x>
-      <y>120</y>
-      <w>100</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>ActionListener
--
--</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>890</x>
-      <y>120</y>
-      <w>70</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
