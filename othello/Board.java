@@ -29,42 +29,41 @@ public class Board extends JPanel {
 
 	// Implementierung für das Klicken auf Felder
 	for (Field[] innerArray : fields) {
-	    for (Field f : innerArray) {
+			for (Field f : innerArray) {
 
 
-		f.addActionListener((ActionEvent e) -> {
-			if (this.getSelectedFields().isEmpty()) {
-				//ich denke deselectAll() koennte geloescht werden, auch wenn es natuerlich sicherer ist destrotz
-				// jedes mal sicherzugehen, dass alle fields auch wirklich deselected sind
+			f.addActionListener((ActionEvent e) -> {
+				if (this.getSelectedFields().isEmpty()) {
+					//ich denke deselectAll() koennte geloescht werden, auch wenn es natuerlich sicherer ist destrotz
+					// jedes mal sicherzugehen, dass alle fields auch wirklich deselected sind
+					deselectAll();
+					f.select();
+					f.changeColorForSelect();
+				} else if (this.getSelectedFields().size() == 1 && f.isSelected()) {
+					f.deselect();
+					f.changeColorToDefault();
+					deselectAll();
+				} else {
+					//weis nicht ob diese else bedingung ueberhaupt noch benoetigt wird oder weggelassen werden kann
+				onSelected();
 				deselectAll();
-				f.select();
-				f.changeColorForSelect();
-			} else if (this.getSelectedFields().size() == 1 && f.isSelected()) {
-				f.deselect();
-				f.changeColorToDefault();
-				deselectAll();
-			} else {
-				//weis nicht ob diese else bedingung ueberhaupt noch benoetigt wird oder weggelassen werden kann
-			onSelected();
-			deselectAll();
-		    }
-		});
-	    }
-	}
+				}
+			});
+			}
+		}
     }
 
     // deselected alle Spielfelder
     private void deselectAll() {
-	for (Field[] innerArray : fields) {
-	    for (Field f : innerArray) {
-		f.deselect();
-	    }
-	}
+		for (Field[] innerArray : fields) {
+			for (Field f : innerArray) {
+				f.deselect();
+			}
+		}
     }
 
     private ArrayList<String> getLegalMoves() {
 		ArrayList<String> legalMoves = new ArrayList<>();
-		int[] tempArray = new int[8];
 		for (Field[] innerArray : fields) {
 			for (Field f : innerArray) {
 				if (f.getOccupation() == Field.Occupation.NONE) {
@@ -77,7 +76,6 @@ public class Board extends JPanel {
 
 	private ArrayList<String> getSelectedFields() {
 		ArrayList<String> selectedFields = new ArrayList<>();
-		int[] tempArray = new int[8];
 		for (Field[] innerArray : fields) {
 			for (Field f : innerArray) {
 				if (f.isSelected()) {
