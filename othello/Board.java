@@ -17,25 +17,34 @@ public class Board extends JPanel {
 	// fields wird initialisiert
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fields[i][j] = new Field();
+		fields[i][j] = new Field(i, j);
 	    }
 	}
 
 	// Startaufstellung
-	fields[3][3].setOccupation(WHITE);
-	fields[3][4].setOccupation(BLACK);
-	fields[4][3].setOccupation(BLACK);
-	fields[4][4].setOccupation(WHITE);
+	fields[3][3].setOccupation(Field.Occupation.WHITE);
+	fields[3][4].setOccupation(Field.Occupation.BLACK);
+	fields[4][3].setOccupation(Field.Occupation.BLACK);
+	fields[4][4].setOccupation(Field.Occupation.WHITE);
 
 	// Implementierung für das Klicken auf Felder
 	for (Field[] innerArray : fields) {
 	    for (Field f : innerArray) {
+
+
 		f.addActionListener((ActionEvent e) -> {
-		    if (!f.isSelected()) {
-			deselectAll();
-			f.select();
-			// TODO Visueller Effekt (z.B. Farbe ändern)
-		    } else {
+			if (this.getSelectedFields().isEmpty()) {
+				//ich denke deselectAll() koennte geloescht werden, auch wenn es natuerlich sicherer ist destrotz
+				// jedes mal sicherzugehen, dass alle fields auch wirklich deselected sind
+				deselectAll();
+				f.select();
+				f.changeColorForSelect();
+			} else if (this.getSelectedFields().size() == 1 && f.isSelected()) {
+				f.deselect();
+				f.changeColorToDefault();
+				deselectAll();
+			} else {
+				//weis nicht ob diese else bedingung ueberhaupt noch benoetigt wird oder weggelassen werden kann
 			onSelected();
 			deselectAll();
 		    }
@@ -53,10 +62,31 @@ public class Board extends JPanel {
 	}
     }
 
-    private ArrayList<int[]> getLegalMoves() {
-	// TODO Es soll eine ArrayList mit int-Arrays der Größe 2 zurückgegeben
-	// werden, die die Koordinaten der wählbaren Felder darstellen
+    private ArrayList<String> getLegalMoves() {
+		ArrayList<String> legalMoves = new ArrayList<>();
+		int[] tempArray = new int[8];
+		for (Field[] innerArray : fields) {
+			for (Field f : innerArray) {
+				if (f.getOccupation() == Field.Occupation.NONE) {
+					legalMoves.add(f.getCoordinates());
+				}
+			}
+		}
+		return legalMoves;
     }
+
+	private ArrayList<String> getSelectedFields() {
+		ArrayList<String> selectedFields = new ArrayList<>();
+		int[] tempArray = new int[8];
+		for (Field[] innerArray : fields) {
+			for (Field f : innerArray) {
+				if (f.isSelected()) {
+					selectedFields.add(f.getCoordinates());
+				}
+			}
+		}
+		return selectedFields;
+	}
 
     private void onSelected() {
 	// TODO Implementierung wie in Issue beschrieben

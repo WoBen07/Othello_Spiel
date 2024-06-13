@@ -3,10 +3,14 @@ package othello;
 import javax.swing.JFrame;
 
 public class OthelloGUI extends JFrame {
-    private Board board = new Board();
-    
+
+    private Board board;
+
     public OthelloGUI() {
 	super("Othello");
-	add(board);
+    board = new Board();
+	this.add(board);
     }
+
+
 }
