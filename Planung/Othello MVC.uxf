@@ -25,8 +25,8 @@ OthelloModel</panel_attributes>
     <panel_attributes>View
 --
 OthelloGUI
-Board
-Field</panel_attributes>
+BoardView
+FieldView</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
