@@ -16,4 +16,8 @@ public class OthelloGUI extends JFrame {
 
 	setVisible(true);
     }
+    
+    public static void updateGUI() {
+	
+    }
 }
