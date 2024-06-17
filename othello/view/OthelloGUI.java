@@ -12,8 +12,6 @@ public class OthelloGUI extends JFrame {
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-	add(new BoardView(controller));
-
 	pack();
 
 	setVisible(true);
