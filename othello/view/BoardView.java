@@ -18,9 +18,13 @@ public class BoardView extends JPanel {
 
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fields[i][j] = new FieldView(i, j, occupations[i][j], controller);
+		fields[i][j] = new FieldView(i, j, controller);
 		add(fields[i][j]);
 	    }
 	}
+    }
+
+    public FieldView[][] getFields() {
+	return fields;
     }
 }

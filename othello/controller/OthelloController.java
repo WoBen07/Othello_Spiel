@@ -2,7 +2,6 @@ package othello.controller;
 
 import othello.Occupation;
 import othello.model.BoardModel;
-import othello.view.BoardView;
 import othello.view.OthelloGUI;
 
 public class OthelloController {
@@ -30,15 +29,18 @@ public class OthelloController {
 	if (getBoard().isBlacksTurn()) {
 	    getBoard().getFields()[xPosition][yPosition]
 		    .setOccupation(Occupation.BLACK);
+	    updateFieldView(xPosition, yPosition, Occupation.BLACK);
 	} else {
 	    getBoard().getFields()[xPosition][yPosition]
 		    .setOccupation(Occupation.WHITE);
+	    updateFieldView(xPosition, yPosition, Occupation.WHITE);
 	}
-	updateBoardView();
     }
 
-    public void updateBoardView() {
-	gui.add(new BoardView(getBoard().getOccupations(), this));
-	gui.pack();
+    public void updateFieldView(int xPosition, int yPosition,
+	    Occupation occupation) {
+
+	gui.getBoard().getFields()[xPosition][yPosition]
+		.occupationChange(occupation);
     }
 }

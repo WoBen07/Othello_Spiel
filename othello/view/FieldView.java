@@ -16,19 +16,13 @@ public class FieldView extends JButton {
     private final int xPosition;
     private final int yPosition;
 
-    public FieldView(int xPosition, int yPosition, Occupation occupation,
+    public FieldView(int xPosition, int yPosition,
 	    OthelloController controller) {
 
 	this.xPosition = xPosition;
 	this.yPosition = yPosition;
 
-	if (occupation == Occupation.NONE) {
-	    setBackground(color);
-	} else if (occupation == Occupation.BLACK) {
-	    setBackground(Color.BLACK);
-	} else {
-	    setBackground(Color.WHITE);
-	}
+	setBackground(color);
 
 	setPreferredSize(new Dimension(100, 100));
 
@@ -42,5 +36,15 @@ public class FieldView extends JButton {
 
     public int getYPosition() {
 	return yPosition;
+    }
+
+    public void occupationChange(Occupation occupation) {
+	if (occupation == Occupation.NONE) {
+	    setBackground(color);
+	} else if (occupation == Occupation.BLACK) {
+	    setBackground(Color.BLACK);
+	} else {
+	    setBackground(Color.WHITE);
+	}
     }
 }

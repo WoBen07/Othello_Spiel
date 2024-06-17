@@ -13,7 +13,5 @@ public class Main {
 	
 	BoardModel board = new BoardModel();
 	controller.setBoard(board);
-	
-	controller.updateBoardView();
     }
 }
