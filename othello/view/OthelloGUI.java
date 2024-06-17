@@ -7,8 +7,6 @@ import othello.controller.OthelloController;
 @SuppressWarnings("serial")
 public class OthelloGUI extends JFrame {
 
-    private OthelloController controller;
-
     public OthelloGUI(OthelloController controller) {
 	super("Othello");
 

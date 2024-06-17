@@ -13,18 +13,16 @@ public class FieldView extends JButton {
 
     private static Color color = new Color(0, 128, 0);
     
-    private OthelloController controller;
     private final int xPosition;
     private final int yPosition;
 
-    public FieldView(OthelloController controller, int xPosition, int yPosition) {
-	this.controller = controller;
+    public FieldView(int xPosition, int yPosition, OthelloController controller) {
 	this.xPosition = xPosition;
 	this.yPosition = yPosition;
 
 	setPreferredSize(new Dimension(100, 100));
 
-	addActionListener(e -> controller.fieldClicked());
+	addActionListener(e -> controller.fieldClicked(getXPosition(), getYPosition()));
     }
 
     public int getXPosition() {
