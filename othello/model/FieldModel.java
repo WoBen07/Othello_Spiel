@@ -13,6 +13,10 @@ public class FieldModel {
 	this.yPosition = yPosition;
     }
 
+    public Occupation getOccupation() {
+	return occupation;
+    }
+    
     public void setOccupation(Occupation occupation) {
 	this.occupation = occupation;
     }

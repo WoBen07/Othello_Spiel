@@ -14,12 +14,20 @@ public class FieldView extends JButton {
     private static Color color = new Color(0, 128, 0);
     private final int xPosition;
     private final int yPosition;
+    private final Occupation occupation;
 
-    public FieldView(int xPosition, int yPosition) {
+    public FieldView(int xPosition, int yPosition, Occupation occupation) {
 	this.xPosition = xPosition;
 	this.yPosition = yPosition;
+	this.occupation = occupation;
 
-	setBackground(color);
+	if (occupation == Occupation.NONE) {
+	    setBackground(color);
+	} else if (occupation == Occupation.BLACK) {
+	    setBackground(Color.BLACK);
+	} else {
+	    setBackground(Color.WHITE);
+	}
 
 	setPreferredSize(new Dimension(100, 100));
 
@@ -32,15 +40,5 @@ public class FieldView extends JButton {
 
     public int getYPosition() {
 	return yPosition;
-    }
-
-    public void setOccupationView(Occupation occupation) {
-	if (occupation == Occupation.NONE) {
-	    setBackground(color);
-	} else if (occupation == Occupation.BLACK) {
-	    setBackground(Color.BLACK);
-	} else {
-	    setBackground(Color.WHITE);
-	}
     }
 }

@@ -14,6 +14,16 @@ public class BoardModel {
 	    }
 	}
     }
+    
+    public Occupation[][] getOccupations() {
+	Occupation[][] occupations = new Occupation[8][8];
+	for (int i = 0; i < 8; ++i) {
+	    for (int j = 0; j < 8; ++j) {
+		occupations[i][j] = fields[i][j].getOccupation();
+	    }
+	}
+	return occupations;
+    }
 
     public boolean isBlacksTurn() {
 	return isBlacksTurn;
