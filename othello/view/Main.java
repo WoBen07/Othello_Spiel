@@ -12,6 +12,6 @@ public class Main {
 	controller.setGUI(gui);
 	
 	BoardModel board = new BoardModel();
-	controller.setBoard(board);
+	controller.setModel(board);
     }
 }

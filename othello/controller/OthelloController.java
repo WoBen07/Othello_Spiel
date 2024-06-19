@@ -7,7 +7,7 @@ import othello.view.OthelloGUI;
 public class OthelloController {
 
     private OthelloGUI gui;
-    private BoardModel board;
+    private BoardModel model;
 
     public OthelloGUI getGUI() {
 	return gui;
@@ -17,30 +17,35 @@ public class OthelloController {
 	this.gui = gui;
     }
 
-    public BoardModel getBoard() {
-	return board;
+    public BoardModel getModel() {
+	return model;
     }
 
-    public void setBoard(BoardModel board) {
-	this.board = board;
+    public void setModel(BoardModel model) {
+	this.model = model;
     }
 
     public void onField(int xPosition, int yPosition) {
-	if (getBoard().isBlacksTurn()) {
-	    getBoard().getFields()[xPosition][yPosition]
-		    .setOccupation(Occupation.BLACK);
+	if (getModel().isBlacksTurn()) {
 	    updateFieldView(xPosition, yPosition, Occupation.BLACK);
+	    getModel().switchTurns();
 	} else {
-	    getBoard().getFields()[xPosition][yPosition]
+	    getModel().getFields()[xPosition][yPosition]
 		    .setOccupation(Occupation.WHITE);
 	    updateFieldView(xPosition, yPosition, Occupation.WHITE);
+	    getModel().switchTurns();
 	}
+    }
+
+    public void updateFieldModel(int xPosition, int yPosition,
+	    Occupation occupation) {
+
+	getModel().updateField(xPosition, yPosition, occupation);
     }
 
     public void updateFieldView(int xPosition, int yPosition,
 	    Occupation occupation) {
 
-	gui.getBoard().getFields()[xPosition][yPosition]
-		.occupationChange(occupation);
+	getGUI().getBoard().updateField(xPosition, yPosition, occupation);
     }
 }

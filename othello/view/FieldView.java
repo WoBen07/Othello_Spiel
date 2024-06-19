@@ -38,7 +38,7 @@ public class FieldView extends JButton {
 	return yPosition;
     }
 
-    public void occupationChange(Occupation occupation) {
+    public void setOccupation(Occupation occupation) {
 	if (occupation == Occupation.NONE) {
 	    setBackground(color);
 	} else if (occupation == Occupation.BLACK) {
