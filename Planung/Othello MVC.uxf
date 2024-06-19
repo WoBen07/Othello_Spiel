@@ -35,7 +35,8 @@ fontsize=10
     </coordinates>
     <panel_attributes>Model
 --
-OthelloModel</panel_attributes>
+BoardModel
+FieldModel</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
