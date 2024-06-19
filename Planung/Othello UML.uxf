@@ -4,21 +4,17 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>770</x>
-      <y>560</y>
-      <w>330</w>
-      <h>180</h>
+      <x>50</x>
+      <y>220</y>
+      <w>470</w>
+      <h>120</h>
     </coordinates>
-    <panel_attributes>FieldView
+    <panel_attributes>othello.view::BoardView
 --
--color = new Color(0, 128, 0): Color
--xPosition: int
--yPosition: int
 --
-+FieldView(int xPosition, int yPosition): ctor
-+getXPosition(): int
-+getYPosition(): int
-+setOccupationView(Occupation occupation): void
++BoardView(Occupation[][] occupations, OthelloController controller): ctor
++getFieldViews(): FieldView[][]
++updateField(int xPosition, int yPosition, Occupation occupation): void
 --
 </panel_attributes>
     <additional_attributes/>
@@ -26,128 +22,178 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>450</x>
-      <y>10</y>
-      <w>340</w>
-      <h>160</h>
+      <x>20</x>
+      <y>20</y>
+      <w>300</w>
+      <h>110</h>
     </coordinates>
-    <panel_attributes>BoardModel
+    <panel_attributes>othello.view::OthelloGUI
 --
--isBlacksTurn = true: boolean
 --
-+BoardModel(): ctor
-+isBlacksTurn(): boolean
-+switchTurns(): void
-+updateOccupation(int xPosition, int yPosition): void</panel_attributes>
++OthelloGUI(OthelloController controller): ctor
++getBoard(): BoardView
+--
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>180</y>
-      <w>300</w>
-      <h>140</h>
+      <x>470</x>
+      <y>20</y>
+      <w>610</w>
+      <h>180</h>
     </coordinates>
-    <panel_attributes>FieldModel
+    <panel_attributes>othello.view::FieldView
 --
+-color = new Color(0, 128, 0): Color
 -xPosition: int
 -yPosition: int
--occupation = Occupation.NONE: Occupation
 --
-+FieldModel(int xPosition, int yPosition): ctor
++FieldView(int xPosition, int yPosition, Occupation occupation, OthelloController controller): ctor
++getXPosition(): int
++getYPosition(): int
 +setOccupation(Occupation occupation): void
 --
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>10</x>
-      <y>20</y>
-      <w>340</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>OthelloModel
---
---
-+OthelloModel(BoardModel board): ctor
-+updateOccupation(int xPosition, int yPosition): void</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>10</x>
-      <y>600</y>
-      <w>170</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>OthelloGUI
---
---
-+OthelloGUI(): ctor
-+updateGUI(): void
---
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>400</x>
-      <y>610</y>
-      <w>170</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>BoardView
---
---
-+BoardView(): ctor
---
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>340</x>
-      <y>60</y>
-      <w>130</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m2=-board</panel_attributes>
-    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>780</x>
-      <y>80</y>
-      <w>190</w>
+      <x>300</x>
+      <y>120</y>
+      <w>140</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-&gt;&gt;&gt;&gt;&gt;
-m2=fields [64..64]</panel_attributes>
-    <additional_attributes>170.0;100.0;170.0;10.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-&gt;
+m2=-board: BoardView</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>330</y>
-      <w>340</w>
-      <h>90</h>
+      <x>870</x>
+      <y>220</y>
+      <w>210</w>
+      <h>190</h>
     </coordinates>
-    <panel_attributes>OthelloController
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+othello::Occupation
+--
+NONE
+BLACK
+WHITE
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>360</y>
+      <w>490</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>othello.controller::OthelloController
 --
 --
-+OthelloController(): ctor
-+actionPerformed(java.awt.event.ActionEvent): void
++getGUI(): OthelloGUI
++setGUI(OthelloGUI gui): void
++getModel(): BoardModel
++setModel(BoardModel model): void
++onField(int xPosition, int yPosition): void
++updateFieldModel(int xPosition, int yPosition, Occupation occupation): void
++updateFieldView(int xPosition, int yPosition, Occupation occupation): void
 --
 </panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>20</x>
+      <y>120</y>
+      <w>130</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=-gui: OthelloGUI</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>630</x>
+      <y>430</y>
+      <w>450</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>othello.model::BoardModel
+--
+-isBlacksTurn = true: boolean
+--
++BoardModel(): ctor
++getFields(): FieldModel[][]
++isBlacksTurn(): boolean
++switchTurns(): void
++updateField(int xPosition, int yPosition, Occupation occupation): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>510</x>
+      <y>190</y>
+      <w>270</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-&gt;
+m2=-fieldViews: FieldView [8..8][8..8]</panel_attributes>
+    <additional_attributes>10.0;90.0;50.0;90.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>360</y>
+      <w>280</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=-model: BoardModel</panel_attributes>
+    <additional_attributes>140.0;70.0;140.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>660</y>
+      <w>300</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>othello.model::FieldModel
+--
+-occupation = Occupation.NONE: Occupation
+--
++getOccupation(): Occupation
++setOccupation(Occupation occupation): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>600</y>
+      <w>500</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-&gt;
+m2=-fields: FieldModel FieldModel[8..8][8..8]</panel_attributes>
+    <additional_attributes>480.0;10.0;480.0;120.0;10.0;120.0</additional_attributes>
   </element>
 </diagram>
