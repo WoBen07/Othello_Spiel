@@ -27,11 +27,11 @@ public class OthelloController {
 
     public void onField(int xPosition, int yPosition) {
 	if (getModel().isBlacksTurn()) {
+	    updateFieldModel(xPosition, yPosition, Occupation.BLACK);
 	    updateFieldView(xPosition, yPosition, Occupation.BLACK);
 	    getModel().switchTurns();
 	} else {
-	    getModel().getFields()[xPosition][yPosition]
-		    .setOccupation(Occupation.WHITE);
+	    updateFieldModel(xPosition, yPosition, Occupation.WHITE);
 	    updateFieldView(xPosition, yPosition, Occupation.WHITE);
 	    getModel().switchTurns();
 	}
