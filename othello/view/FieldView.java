@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 
 import othello.Occupation;
-import othello.controller.OthelloController;
 
 @SuppressWarnings("serial")
 public class FieldView extends JButton {
@@ -26,12 +25,14 @@ public class FieldView extends JButton {
 	this.yPosition = yPosition;
 	setOccupation(occupation);
 
-	setOccupation(occupation);
-
 	setPreferredSize(new Dimension(100, 100));
 
-	addActionListener(e -> boardView.getController().onField(getXPosition(),
-		getYPosition()));
+	addActionListener(e -> getBoardView().getController()
+		.onField(getXPosition(), getYPosition()));
+    }
+
+    public BoardView getBoardView() {
+	return boardView;
     }
 
     public int getXPosition() {
@@ -55,9 +56,5 @@ public class FieldView extends JButton {
 	} else {
 	    setBackground(Color.WHITE);
 	}
-    }
-
-    public BoardView getBoardView() {
-	return boardView;
     }
 }
