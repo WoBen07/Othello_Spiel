@@ -2,6 +2,8 @@ package othello.view;
 
 import java.awt.GridLayout;
 
+import java.util.Arrays;
+
 import javax.swing.JPanel;
 
 import othello.Occupation;
@@ -24,17 +26,23 @@ public class BoardView extends JPanel {
 
 	setFieldViews();
 
-	for (int i = 0; i < 8; ++i) {
-	    for (int j = 0; j < 8; ++j) {
-		add(getFieldViews()[i][j]);
-	    }
-	}
+	Arrays.stream(getFieldViews()).forEach((FieldView[] row) -> {
+	    Arrays.stream(row).forEach(col -> add(col));
+	});
     }
 
     private static boolean checkFieldViewOccupations(
 	    Occupation[][] fieldViewOccupations) {
 
-	return fieldViewOccupations.length == 64;
+	if (fieldViewOccupations.length != 8) {
+	    return false;
+	}
+	for (int i = 0; i < 8; ++i) {
+	    if (fieldViewOccupations[i].length != 8) {
+		return false;
+	    }
+	}
+	return true;
     }
 
     public FieldView[][] getFieldViews() {
