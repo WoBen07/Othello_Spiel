@@ -46,6 +46,6 @@ public class OthelloController {
     public void updateFieldView(int xPosition, int yPosition,
 	    Occupation occupation) {
 
-	getGUI().getBoard().updateField(xPosition, yPosition, occupation);
+	getGUI().getBoard().updateFieldView(xPosition, yPosition, occupation);
     }
 }
