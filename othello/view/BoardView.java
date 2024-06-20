@@ -82,6 +82,6 @@ public class BoardView extends JPanel {
     public void updateFieldView(int xPosition, int yPosition,
 	    Occupation occupation) {
 
-	getFieldViews()[xPosition][yPosition].updateFV(occupation);
+	getFieldViews()[xPosition][yPosition].setOccupation(occupation);
     }
 }

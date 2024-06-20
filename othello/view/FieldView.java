@@ -26,7 +26,7 @@ public class FieldView extends JButton {
 	this.yPosition = yPosition;
 	setOccupation(occupation);
 
-	updateFV(occupation);
+	setOccupation(occupation);
 
 	setPreferredSize(new Dimension(100, 100));
 
@@ -48,13 +48,6 @@ public class FieldView extends JButton {
 
     public void setOccupation(Occupation occupation) {
 	this.occupation = occupation;
-    }
-
-    public BoardView getBoardView() {
-	return boardView;
-    }
-
-    public void updateFV(Occupation occupation) {
 	if (occupation == Occupation.NONE) {
 	    setBackground(color);
 	} else if (occupation == Occupation.BLACK) {
@@ -62,5 +55,9 @@ public class FieldView extends JButton {
 	} else {
 	    setBackground(Color.WHITE);
 	}
+    }
+
+    public BoardView getBoardView() {
+	return boardView;
     }
 }
