@@ -52,8 +52,8 @@ public class BoardView extends JPanel {
     public void setFieldViews() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fieldViews[i][j] = new FieldView(i, j,
-			getFieldViewOccupations()[i][j], getController());
+		fieldViews[i][j] = new FieldView(this, i, j,
+			getFieldViewOccupations()[i][j]);
 	    }
 	}
     }
@@ -82,6 +82,6 @@ public class BoardView extends JPanel {
     public void updateFieldView(int xPosition, int yPosition,
 	    Occupation occupation) {
 
-	getFieldViews()[xPosition][yPosition].setOccupation(occupation);
+	getFieldViews()[xPosition][yPosition].updateFV(occupation);
     }
 }

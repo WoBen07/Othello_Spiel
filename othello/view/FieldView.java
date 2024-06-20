@@ -13,21 +13,25 @@ public class FieldView extends JButton {
 
     private static Color color = new Color(0, 128, 0);
 
+    private final BoardView boardView;
     private final int xPosition;
     private final int yPosition;
+    private Occupation occupation;
 
-    public FieldView(int xPosition, int yPosition, Occupation occupation,
-	    OthelloController controller) {
+    public FieldView(BoardView boardView, int xPosition, int yPosition,
+	    Occupation occupation) {
 
+	this.boardView = boardView;
 	this.xPosition = xPosition;
 	this.yPosition = yPosition;
-
 	setOccupation(occupation);
+
+	updateFV(occupation);
 
 	setPreferredSize(new Dimension(100, 100));
 
-	addActionListener(
-		e -> controller.onField(getXPosition(), getYPosition()));
+	addActionListener(e -> boardView.getController().onField(getXPosition(),
+		getYPosition()));
     }
 
     public int getXPosition() {
@@ -38,7 +42,19 @@ public class FieldView extends JButton {
 	return yPosition;
     }
 
+    public Occupation getOccupation() {
+	return occupation;
+    }
+
     public void setOccupation(Occupation occupation) {
+	this.occupation = occupation;
+    }
+
+    public BoardView getBoardView() {
+	return boardView;
+    }
+
+    public void updateFV(Occupation occupation) {
 	if (occupation == Occupation.NONE) {
 	    setBackground(color);
 	} else if (occupation == Occupation.BLACK) {
