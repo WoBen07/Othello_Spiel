@@ -15,7 +15,9 @@ public class OthelloGUI extends JFrame {
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-	board = new BoardView(new Occupation[8][8], controller);
+	Occupation[][] fieldViewOccupations = new Occupation[8][8];
+	Occupation.fill(fieldViewOccupations, Occupation.NONE);
+	board = new BoardView(fieldViewOccupations, controller);
 	add(board);
 
 	pack();
