@@ -52,7 +52,7 @@ public class FieldView extends JButton {
 
 	if (occupation == Occupation.NONE) {
 	    setBackground(color);
-	} else if (occupation == Occupation.BLACK) {
+	} else if (occupation == Occupation.DARK) {
 	    setBackground(Color.BLACK);
 	} else {
 	    setBackground(Color.WHITE);
