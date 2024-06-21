@@ -37,20 +37,25 @@ public class OthelloController {
 
     public void initView() {
 	setGUI(new OthelloGUI(this));
-	getGUI().add(new BoardView(getGUI(), getModel().getFieldOccupations()));
+	getGUI().setBoard(
+		new BoardView(getGUI(), getModel().getFieldOccupations()));
+	getGUI().add(getGUI().getBoard());
 	getGUI().pack();
     }
 
     public void onField(int xPosition, int yPosition) {
-	if (getModel().isBlacksTurn()) {
-	    updateFieldModel(xPosition, yPosition, Occupation.BLACK);
-	    updateFieldView(xPosition, yPosition, Occupation.BLACK);
-	    getModel().switchTurns();
-	} else {
-	    updateFieldModel(xPosition, yPosition, Occupation.WHITE);
-	    updateFieldView(xPosition, yPosition, Occupation.WHITE);
-	    getModel().switchTurns();
+	if (getModel().getValidMoves()[xPosition][yPosition]) {
+	    if (getModel().isBlacksTurn()) {
+		updateFieldModel(xPosition, yPosition, Occupation.BLACK);
+		updateFieldView(xPosition, yPosition, Occupation.BLACK);
+		getModel().switchTurns();
+	    } else {
+		updateFieldModel(xPosition, yPosition, Occupation.WHITE);
+		updateFieldView(xPosition, yPosition, Occupation.WHITE);
+		getModel().switchTurns();
+	    }
 	}
+	// TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
     }
 
     public void updateFieldModel(int xPosition, int yPosition,

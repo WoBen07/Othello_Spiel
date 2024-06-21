@@ -47,7 +47,6 @@ public class BoardModel {
 	if (checkFieldOccupations(fieldOccupations)) {
 	    this.fieldOccupations = fieldOccupations;
 	} else {
-	    // TODO eigene Exception implementieren
 	    throw new IllegalArgumentException("64 occupation-details needed");
 	}
     }
@@ -62,6 +61,18 @@ public class BoardModel {
 	} else {
 	    isBlacksTurn = true;
 	}
+    }
+
+    // TODO abhängig von isBlacksTurn für jedes Feld speichern, ob der Spieler
+    // am Zug einen Stein darauf setzen darf
+    public boolean[][] getValidMoves() {
+	boolean[][] validMoves = new boolean[8][8];
+	for (int i = 0; i < 8; ++i) {
+	    for (int j = 0; j < 8; ++j) {
+		validMoves[i][j] = true;
+	    }
+	}
+	return validMoves;
     }
 
     public void updateField(int xPosition, int yPosition,

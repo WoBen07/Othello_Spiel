@@ -75,7 +75,6 @@ public class BoardView extends JPanel {
 	if (checkFieldViewOccupations(fieldViewOccupations)) {
 	    this.fieldViewOccupations = fieldViewOccupations;
 	} else {
-	    // TODO eigene Exception implementieren
 	    throw new IllegalArgumentException("64 occupation-details needed");
 	}
     }
