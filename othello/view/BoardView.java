@@ -7,28 +7,22 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 
 import othello.Occupation;
-import othello.controller.OthelloController;
 
 @SuppressWarnings("serial")
 public class BoardView extends JPanel {
 
+    private OthelloGUI gui;
     private final FieldView[][] fieldViews = new FieldView[8][8];
     private Occupation[][] fieldViewOccupations;
-    private OthelloController controller;
 
-    public BoardView(Occupation[][] fieldViewOccupations,
-	    OthelloController controller) {
-
-	setFieldViewOccupations(fieldViewOccupations);
-	setController(controller);
-
-	setLayout(new GridLayout(8, 8));
-
+    public BoardView(OthelloGUI gui, Occupation[][] fieldViewOccupations) {
 	setFieldViews();
 
-	Arrays.stream(getFieldViews()).forEach((FieldView[] row) -> {
-	    Arrays.stream(row).forEach(col -> add(col));
-	});
+	setGUI(gui);
+	setFieldViewOccupations(fieldViewOccupations);
+
+	setLayout(new GridLayout(8, 8));
+	addFieldViews();
     }
 
     private static boolean checkFieldViewOccupations(
@@ -45,17 +39,39 @@ public class BoardView extends JPanel {
 	return true;
     }
 
+    public OthelloGUI getGUI() {
+	return gui;
+    }
+
+    public void setGUI(OthelloGUI gui) {
+	this.gui = gui;
+    }
+
     public FieldView[][] getFieldViews() {
 	return fieldViews;
     }
 
-    public void setFieldViews() {
+    private void setFieldViews() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fieldViews[i][j] = new FieldView(this, i, j,
-			getFieldViewOccupations()[i][j]);
+		fieldViews[i][j] = new FieldView(this, i, j, Occupation.NONE);
 	    }
 	}
+    }
+
+    private void updateFieldViews() {
+	for (int i = 0; i < 8; ++i) {
+	    for (int j = 0; j < 8; ++j) {
+		getFieldViews()[i][j]
+			.setOccupation(getFieldViewOccupations()[i][j]);
+	    }
+	}
+    }
+
+    private void addFieldViews() {
+	Arrays.stream(getFieldViews()).forEach((FieldView[] row) -> {
+	    Arrays.stream(row).forEach(field -> add(field));
+	});
     }
 
     public Occupation[][] getFieldViewOccupations() {
@@ -65,23 +81,9 @@ public class BoardView extends JPanel {
     public void setFieldViewOccupations(Occupation[][] fieldViewOccupations) {
 	if (checkFieldViewOccupations(fieldViewOccupations)) {
 	    this.fieldViewOccupations = fieldViewOccupations;
+	    updateFieldViews();
 	} else {
-	    // TODO eigene Exception implementieren
 	    throw new IllegalArgumentException("64 occupation-details needed");
 	}
-    }
-
-    public OthelloController getController() {
-	return controller;
-    }
-
-    public void setController(OthelloController controller) {
-	this.controller = controller;
-    }
-
-    public void updateFieldView(int xPosition, int yPosition,
-	    Occupation occupation) {
-
-	getFieldViews()[xPosition][yPosition].setOccupation(occupation);
     }
 }

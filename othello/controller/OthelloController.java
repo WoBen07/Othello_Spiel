@@ -1,13 +1,21 @@
 package othello.controller;
 
+import javax.swing.JOptionPane;
+
 import othello.Occupation;
 import othello.model.BoardModel;
+import othello.view.BoardView;
 import othello.view.OthelloGUI;
 
 public class OthelloController {
 
     private OthelloGUI gui;
     private BoardModel model;
+
+    public OthelloController() {
+	initModel();
+	initView();
+    }
 
     public OthelloGUI getGUI() {
 	return gui;
@@ -25,27 +33,57 @@ public class OthelloController {
 	this.model = model;
     }
 
+    public void initModel() {
+	setModel(new BoardModel(Occupation.startOccupations()));
+    }
+
+    public void initView() {
+	setGUI(new OthelloGUI(this));
+	getGUI().setBoard(
+		new BoardView(getGUI(), getModel().getFieldOccupations()));
+	getGUI().add(getGUI().getBoard());
+	getGUI().pack();
+    }
+
     public void onField(int xPosition, int yPosition) {
-	if (getModel().isBlacksTurn()) {
-	    updateFieldModel(xPosition, yPosition, Occupation.BLACK);
-	    updateFieldView(xPosition, yPosition, Occupation.BLACK);
-	    getModel().switchTurns();
+	// Wenn es einen legalen Zug gibt
+	if (getModel().isLegalMove()) {
+	    // Wenn der ausgewählte Zug legal ist
+	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
+		if (getModel().isDarksTurn()) {
+		    updateFieldModel(xPosition, yPosition, Occupation.DARK);
+		    getModel().flipOccupations(xPosition, yPosition);
+		    updateFieldViews();
+		    getModel().switchTurns();
+		} else {
+		    updateFieldModel(xPosition, yPosition, Occupation.LIGHT);
+		    getModel().flipOccupations(xPosition, yPosition);
+		    updateFieldViews();
+		    getModel().switchTurns();
+		}
+	    }
 	} else {
-	    updateFieldModel(xPosition, yPosition, Occupation.WHITE);
-	    updateFieldView(xPosition, yPosition, Occupation.WHITE);
-	    getModel().switchTurns();
+	    if (getModel().wasPassPlayed()) {
+		JOptionPane.showMessageDialog(getGUI(), "Game End");
+	    } else {
+		JOptionPane.showMessageDialog(getGUI(),
+			"No legal moves, you have to pass", null,
+			JOptionPane.INFORMATION_MESSAGE);
+		getModel().setPassPlayed(true);
+		getModel().switchTurns();
+	    }
 	}
+	// TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
     }
 
     public void updateFieldModel(int xPosition, int yPosition,
 	    Occupation occupation) {
 
-	getModel().updateField(xPosition, yPosition, occupation);
+	getModel().updateFieldOccupation(xPosition, yPosition, occupation);
     }
 
-    public void updateFieldView(int xPosition, int yPosition,
-	    Occupation occupation) {
-
-	getGUI().getBoard().updateFieldView(xPosition, yPosition, occupation);
+    public void updateFieldViews() {
+	getGUI().getBoard()
+		.setFieldViewOccupations(getModel().getFieldOccupations());
     }
 }
