@@ -9,6 +9,11 @@ public class OthelloController {
     private OthelloGUI gui;
     private BoardModel model;
 
+    public OthelloController() {
+	initView();
+	initModel();
+    }
+
     public OthelloGUI getGUI() {
 	return gui;
     }
@@ -23,6 +28,14 @@ public class OthelloController {
 
     public void setModel(BoardModel model) {
 	this.model = model;
+    }
+
+    public void initView() {
+	setGUI(new OthelloGUI(this));
+    }
+
+    public void initModel() {
+	setModel(new BoardModel(Occupation.startOccupations()));
     }
 
     public void onField(int xPosition, int yPosition) {

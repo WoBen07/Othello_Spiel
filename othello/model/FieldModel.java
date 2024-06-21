@@ -4,7 +4,7 @@ import othello.Occupation;
 
 public class FieldModel {
 
-    private Occupation occupation = Occupation.NONE;
+    private Occupation occupation;
 
     public FieldModel(Occupation occupation) {
 	setOccupation(occupation);

@@ -63,7 +63,7 @@ public class BoardView extends JPanel {
 
     private void addFieldViews() {
 	Arrays.stream(getFieldViews()).forEach((FieldView[] row) -> {
-	    Arrays.stream(row).forEach(col -> add(col));
+	    Arrays.stream(row).forEach(field -> add(field));
 	});
     }
 
