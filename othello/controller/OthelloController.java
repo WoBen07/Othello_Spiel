@@ -69,6 +69,8 @@ public class OthelloController {
 		JOptionPane.showMessageDialog(getGUI(),
 			"No legal moves, you have to pass", null,
 			JOptionPane.INFORMATION_MESSAGE);
+		getModel().setPassPlayed(true);
+		getModel().switchTurns();
 	    }
 	}
 	// TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
