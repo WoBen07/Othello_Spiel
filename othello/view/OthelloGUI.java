@@ -2,7 +2,6 @@ package othello.view;
 
 import javax.swing.JFrame;
 
-import othello.Occupation;
 import othello.controller.OthelloController;
 
 @SuppressWarnings("serial")
@@ -17,11 +16,6 @@ public class OthelloGUI extends JFrame {
 	setController(controller);
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-	Occupation[][] fieldViewOccupations = new Occupation[8][8];
-	Occupation.fill(fieldViewOccupations, Occupation.NONE);
-	board = new BoardView(this, fieldViewOccupations);
-	add(board);
 
 	pack();
 

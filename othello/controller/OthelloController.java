@@ -2,6 +2,7 @@ package othello.controller;
 
 import othello.Occupation;
 import othello.model.BoardModel;
+import othello.view.BoardView;
 import othello.view.OthelloGUI;
 
 public class OthelloController {
@@ -10,8 +11,8 @@ public class OthelloController {
     private BoardModel model;
 
     public OthelloController() {
-	initView();
 	initModel();
+	initView();
     }
 
     public OthelloGUI getGUI() {
@@ -30,12 +31,14 @@ public class OthelloController {
 	this.model = model;
     }
 
-    public void initView() {
-	setGUI(new OthelloGUI(this));
-    }
-
     public void initModel() {
 	setModel(new BoardModel(Occupation.startOccupations()));
+    }
+
+    public void initView() {
+	setGUI(new OthelloGUI(this));
+	getGUI().add(new BoardView(getGUI(), getModel().getFieldOccupations()));
+	getGUI().pack();
     }
 
     public void onField(int xPosition, int yPosition) {
