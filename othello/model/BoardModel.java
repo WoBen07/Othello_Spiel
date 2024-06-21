@@ -6,11 +6,13 @@ public class BoardModel {
 
     private final FieldModel[][] fields = new FieldModel[8][8];
     private Occupation[][] fieldOccupations;
-    private boolean isBlacksTurn = true;
+    private boolean darksTurn = true;
+    private boolean passPlayed = false;
 
     public BoardModel(Occupation[][] fieldOccupations) {
-	setFieldOccupations(fieldOccupations);
 	setFields();
+	
+	setFieldOccupations(fieldOccupations);
     }
 
     private static boolean checkFieldOccupations(
@@ -34,7 +36,15 @@ public class BoardModel {
     private void setFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		getFields()[i][j] = new FieldModel(getFieldOccupations()[i][j]);
+		fields[i][j] = new FieldModel(Occupation.NONE);
+	    }
+	}
+    }
+
+    private void updateFields() {
+	for (int i = 0; i < 8; ++i) {
+	    for (int j = 0; j < 8; ++j) {
+		getFields()[i][j].setOccupation(getFieldOccupations()[i][j]);
 	    }
 	}
     }
@@ -46,39 +56,59 @@ public class BoardModel {
     public void setFieldOccupations(Occupation[][] fieldOccupations) {
 	if (checkFieldOccupations(fieldOccupations)) {
 	    this.fieldOccupations = fieldOccupations;
+	    updateFields();
 	} else {
 	    throw new IllegalArgumentException("64 occupation-details needed");
 	}
     }
 
-    public boolean isBlacksTurn() {
-	return isBlacksTurn;
+    public void updateFieldOccupation(int xPosition, int yPosition,
+	    Occupation occupation) {
+	getFieldOccupations()[xPosition][yPosition] = occupation;
+	updateFields();
+    }
+
+    public boolean isDarksTurn() {
+	return darksTurn;
     }
 
     public void switchTurns() {
-	if (isBlacksTurn) {
-	    isBlacksTurn = false;
+	if (darksTurn) {
+	    darksTurn = false;
 	} else {
-	    isBlacksTurn = true;
+	    darksTurn = true;
 	}
+    }
+
+    public boolean wasPassPlayed() {
+	return passPlayed;
+    }
+
+    public void setPassPlayed(boolean passPlayed) {
+	this.passPlayed = passPlayed;
     }
 
     // TODO abhängig von isBlacksTurn für jedes Feld speichern, ob der Spieler
     // am Zug einen Stein darauf setzen darf
     public boolean[][] getLegalMoves() {
-	boolean[][] validMoves = new boolean[8][8];
+	boolean[][] legalMoves = new boolean[8][8];
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		validMoves[i][j] = true;
+		legalMoves[i][j] = true;
 	    }
 	}
-	return validMoves;
+	return legalMoves;
     }
 
-    public void updateField(int xPosition, int yPosition,
-	    Occupation occupation) {
-
-	getFields()[xPosition][yPosition].setOccupation(occupation);
+    public boolean isLegalMove() {
+	for (boolean[] row : getLegalMoves()) {
+	    for (boolean b : row) {
+		if (b) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     // TODO hier sollen die Steine, die mit dem gerade gesetzten Stein

@@ -1,5 +1,7 @@
 package othello.controller;
 
+import javax.swing.JOptionPane;
+
 import othello.Occupation;
 import othello.model.BoardModel;
 import othello.view.BoardView;
@@ -44,17 +46,29 @@ public class OthelloController {
     }
 
     public void onField(int xPosition, int yPosition) {
-	if (getModel().getLegalMoves()[xPosition][yPosition]) {
-	    if (getModel().isBlacksTurn()) {
-		updateFieldModel(xPosition, yPosition, Occupation.DARK);
-		getModel().flipOccupations(xPosition, yPosition);
-		updateFieldViews();
-		getModel().switchTurns();
+	// Wenn es einen legalen Zug gibt
+	if (getModel().isLegalMove()) {
+	    // Wenn der ausgewählte Zug legal ist
+	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
+		if (getModel().isDarksTurn()) {
+		    updateFieldModel(xPosition, yPosition, Occupation.DARK);
+		    getModel().flipOccupations(xPosition, yPosition);
+		    updateFieldViews();
+		    getModel().switchTurns();
+		} else {
+		    updateFieldModel(xPosition, yPosition, Occupation.LIGHT);
+		    getModel().flipOccupations(xPosition, yPosition);
+		    updateFieldViews();
+		    getModel().switchTurns();
+		}
+	    }
+	} else {
+	    if (getModel().wasPassPlayed()) {
+		JOptionPane.showMessageDialog(getGUI(), "Game End");
 	    } else {
-		updateFieldModel(xPosition, yPosition, Occupation.LIGHT);
-		getModel().flipOccupations(xPosition, yPosition);
-		updateFieldViews();
-		getModel().switchTurns();
+		JOptionPane.showMessageDialog(getGUI(),
+			"No legal moves, you have to pass", null,
+			JOptionPane.INFORMATION_MESSAGE);
 	    }
 	}
 	// TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
@@ -63,10 +77,11 @@ public class OthelloController {
     public void updateFieldModel(int xPosition, int yPosition,
 	    Occupation occupation) {
 
-	getModel().updateField(xPosition, yPosition, occupation);
+	getModel().updateFieldOccupation(xPosition, yPosition, occupation);
     }
 
     public void updateFieldViews() {
-	getGUI().getBoard().updateFieldViews(getModel().getFieldOccupations());
+	getGUI().getBoard()
+		.setFieldViewOccupations(getModel().getFieldOccupations());
     }
 }

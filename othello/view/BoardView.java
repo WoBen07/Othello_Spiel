@@ -16,13 +16,13 @@ public class BoardView extends JPanel {
     private Occupation[][] fieldViewOccupations;
 
     public BoardView(OthelloGUI gui, Occupation[][] fieldViewOccupations) {
-
+	setFieldViews();
+	
 	setGUI(gui);
 	setFieldViewOccupations(fieldViewOccupations);
 
 	setLayout(new GridLayout(8, 8));
 
-	setFieldViews();
 	addFieldViews();
     }
 
@@ -52,19 +52,20 @@ public class BoardView extends JPanel {
 	return fieldViews;
     }
 
-    public void setFieldViews() {
+    private void setFieldViews() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
 		fieldViews[i][j] = new FieldView(this, i, j,
-			getFieldViewOccupations()[i][j]);
+			Occupation.NONE);
 	    }
 	}
     }
 
-    public void updateFieldViews(Occupation[][] fieldViewOccupations) {
+    private void updateFieldViews() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		getFieldViews()[i][j].setOccupation(fieldViewOccupations[i][j]);
+		getFieldViews()[i][j]
+			.setOccupation(getFieldViewOccupations()[i][j]);
 	    }
 	}
     }
@@ -82,6 +83,7 @@ public class BoardView extends JPanel {
     public void setFieldViewOccupations(Occupation[][] fieldViewOccupations) {
 	if (checkFieldViewOccupations(fieldViewOccupations)) {
 	    this.fieldViewOccupations = fieldViewOccupations;
+	    updateFieldViews();
 	} else {
 	    throw new IllegalArgumentException("64 occupation-details needed");
 	}
