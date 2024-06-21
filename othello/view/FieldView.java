@@ -27,7 +27,7 @@ public class FieldView extends JButton {
 
 	setPreferredSize(new Dimension(100, 100));
 
-	addActionListener(e -> getBoardView().getController()
+	addActionListener(e -> getBoardView().getGUI().getController()
 		.onField(getXPosition(), getYPosition()));
     }
 
@@ -49,6 +49,7 @@ public class FieldView extends JButton {
 
     public void setOccupation(Occupation occupation) {
 	this.occupation = occupation;
+
 	if (occupation == Occupation.NONE) {
 	    setBackground(color);
 	} else if (occupation == Occupation.BLACK) {
