@@ -80,4 +80,10 @@ public class BoardModel {
 
 	getFields()[xPosition][yPosition].setOccupation(occupation);
     }
+
+    // TODO hier sollen die Steine, die mit dem gerade gesetzten Stein
+    // eingeschlossen wurden, (mithilfe von updateField()) "umgedreht" werden
+    public void flipOccupations(int xMove, int yMove) {
+
+    }
 }

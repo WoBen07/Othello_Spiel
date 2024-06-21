@@ -61,6 +61,14 @@ public class BoardView extends JPanel {
 	}
     }
 
+    public void updateFieldViews(Occupation[][] fieldViewOccupations) {
+	for (int i = 0; i < 8; ++i) {
+	    for (int j = 0; j < 8; ++j) {
+		getFieldViews()[i][j].setOccupation(fieldViewOccupations[i][j]);
+	    }
+	}
+    }
+
     private void addFieldViews() {
 	Arrays.stream(getFieldViews()).forEach((FieldView[] row) -> {
 	    Arrays.stream(row).forEach(field -> add(field));
@@ -77,11 +85,5 @@ public class BoardView extends JPanel {
 	} else {
 	    throw new IllegalArgumentException("64 occupation-details needed");
 	}
-    }
-
-    public void updateFieldView(int xPosition, int yPosition,
-	    Occupation occupation) {
-
-	getFieldViews()[xPosition][yPosition].setOccupation(occupation);
     }
 }

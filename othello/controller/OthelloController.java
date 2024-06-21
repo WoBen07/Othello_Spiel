@@ -47,11 +47,13 @@ public class OthelloController {
 	if (getModel().getValidMoves()[xPosition][yPosition]) {
 	    if (getModel().isBlacksTurn()) {
 		updateFieldModel(xPosition, yPosition, Occupation.BLACK);
-		updateFieldView(xPosition, yPosition, Occupation.BLACK);
+		getModel().flipOccupations(xPosition, yPosition);
+		updateFieldViews();
 		getModel().switchTurns();
 	    } else {
 		updateFieldModel(xPosition, yPosition, Occupation.WHITE);
-		updateFieldView(xPosition, yPosition, Occupation.WHITE);
+		getModel().flipOccupations(xPosition, yPosition);
+		updateFieldViews();
 		getModel().switchTurns();
 	    }
 	}
@@ -64,9 +66,7 @@ public class OthelloController {
 	getModel().updateField(xPosition, yPosition, occupation);
     }
 
-    public void updateFieldView(int xPosition, int yPosition,
-	    Occupation occupation) {
-
-	getGUI().getBoard().updateFieldView(xPosition, yPosition, occupation);
+    public void updateFieldViews() {
+	getGUI().getBoard().updateFieldViews(getModel().getFieldOccupations());
     }
 }
