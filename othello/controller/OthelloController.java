@@ -44,7 +44,7 @@ public class OthelloController {
     }
 
     public void onField(int xPosition, int yPosition) {
-	if (getModel().getValidMoves()[xPosition][yPosition]) {
+	if (getModel().getLegalMoves()[xPosition][yPosition]) {
 	    if (getModel().isBlacksTurn()) {
 		updateFieldModel(xPosition, yPosition, Occupation.BLACK);
 		getModel().flipOccupations(xPosition, yPosition);
