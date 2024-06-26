@@ -35,25 +35,30 @@ public class OthelloController {
 
     public void initModel() {
 	setModel(new BoardModel(Occupation.startOccupations()));
+	getModel().updateLegalMoves();
     }
 
     public void initView() {
 	setGUI(new OthelloGUI(this));
 	getGUI().setBoard(
-		new BoardView(getGUI(), getModel().getFieldOccupations(), getModel().getLegalMoves()));
+		new BoardView(getGUI(), getModel().getFieldOccupations()));
 	getGUI().add(getGUI().getBoard());
 	getGUI().pack();
     }
 
-    public void onField(int xPosition, int yPosition) {
+    public void fieldClicked(int xPosition, int yPosition) {
 	// Wenn es einen legalen Zug gibt
 	if (getModel().getLegalMoveExists()) {
 	    // Wenn der ausgewählte Zug legal ist
 	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
-				updateFieldModel(xPosition, yPosition, (getModel().isDarksTurn() ? Occupation.DARK : Occupation.LIGHT));
-				getModel().flipOccupations(xPosition, yPosition);
-				updateFieldViews();
-				getModel().switchTurns();
+		updateFieldModel(xPosition, yPosition,
+			(getModel().isDarksTurn() ? Occupation.DARK
+				: Occupation.LIGHT));
+		getModel().flipOccupations(xPosition, yPosition);
+		updateFieldViews();
+		getModel().switchTurns();
+		getModel().updateLegalMoves();
+	    }
 	} else {
 	    if (getModel().wasPassPlayed()) {
 		JOptionPane.showMessageDialog(getGUI(), "Game End");
@@ -65,19 +70,18 @@ public class OthelloController {
 		getModel().switchTurns();
 	    }
 	}
-	}
-}
-	// TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
+    }
+
+    // TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
 
     public void updateFieldModel(int xPosition, int yPosition,
 	    Occupation occupation) {
 
 	getModel().updateFieldOccupation(xPosition, yPosition, occupation);
-	getModel().updateLegalMoves();
     }
 
     public void updateFieldViews() {
 	getGUI().getBoard()
-		.setFieldViewOccupations(getModel().getFieldOccupations(), getModel().getLegalMoves());
+		.setFieldViewOccupations(getModel().getFieldOccupations());
     }
 }

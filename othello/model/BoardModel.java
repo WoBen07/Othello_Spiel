@@ -8,23 +8,23 @@ public class BoardModel {
     private Occupation[][] fieldOccupations;
     private boolean darksTurn = true;
     private boolean passPlayed = false;
-	private boolean[][] legalMoves;
-	private boolean legalMoveExists = false;
+    private boolean[][] legalMoves;
+    private boolean legalMoveExists = false;
 
     public BoardModel(Occupation[][] fieldOccupations) {
-	setFields();
-	
+	initFields();
+
 	setFieldOccupations(fieldOccupations);
 	updateLegalMoves();
     }
 
-	public boolean[][] getLegalMoves() {
-		return legalMoves;
-	}
+    public boolean[][] getLegalMoves() {
+	return legalMoves;
+    }
 
-	public boolean getLegalMoveExists() {
-		return legalMoveExists;
-	}
+    public boolean getLegalMoveExists() {
+	return legalMoveExists;
+    }
 
     private static boolean checkFieldOccupations(
 	    Occupation[][] fieldOccupations) {
@@ -44,7 +44,7 @@ public class BoardModel {
 	return fields;
     }
 
-    private void setFields() {
+    private void initFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
 		fields[i][j] = new FieldModel(Occupation.NONE);
@@ -69,11 +69,13 @@ public class BoardModel {
 	    this.fieldOccupations = fieldOccupations;
 	    updateFields();
 	} else {
-	    throw new IllegalArgumentException("64 occupation-details needed");
+	    throw new IllegalArgumentException(
+		    "fieldOccupations does not contain 8x8 occupation-details");
 	}
     }
 
-    public void updateFieldOccupation(int xPosition, int yPosition, Occupation occupation) {
+    public void updateFieldOccupation(int xPosition, int yPosition,
+	    Occupation occupation) {
 	getFieldOccupations()[xPosition][yPosition] = occupation;
 	updateFields();
     }
@@ -98,100 +100,113 @@ public class BoardModel {
 	this.passPlayed = passPlayed;
     }
 
-
-	//sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer variable gespeichert werden
+    // sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer
+    // variable gespeichert werden
     public void updateLegalMoves() {
 	boolean[][] tempLegalMoves = new boolean[8][8];
 	for (int i = 0; i < 8; i++) {
 	    for (int j = 0; j < 8; j++) {
-			tempLegalMoves[i][j] = (isValidMove(i, j) && isLegalMove(i, j));
-			if (tempLegalMoves[i][j]) {
-				legalMoveExists = true;
-			}
+		tempLegalMoves[i][j] = (isLegalMove(i, j));
+		if (tempLegalMoves[i][j]) {
+		    legalMoveExists = true;
+		}
 	    }
-	}	
-		this.legalMoves = tempLegalMoves;
-    }
-
-    private boolean isValidMove(int x, int y) {
-	if (getFieldOccupations()[x][y] == Occupation.NONE) {
-	    return true;
-	} else {
-		return false;
 	}
+	this.legalMoves = tempLegalMoves;
     }
 
-	
     private boolean isLegalMove(int x, int y) {
-        Occupation originalOccupation = getFieldOccupations()[x][y];
-        getFieldOccupations()[x][y] = darksTurn ? Occupation.DARK : Occupation.LIGHT;
-        boolean result = flipOccupations(x, y);
-        getFieldOccupations()[x][y] = originalOccupation; 
-        return result;
+	if (getFieldOccupations()[x][y] == Occupation.NONE) {
+	    return flipOccupations(x, y);
+	}
+	return false;
     }
 
-
-
-
-	
     public boolean flipOccupations(int xNewPiece, int yNewPiece) {
 
-		boolean atLeastOnePieceFlipped = false;
+	boolean atLeastOnePieceFlipped = false;
 
-        int[][] directions = {
-            {-1, 0}, {1, 0}, {0, -1}, {0, 1}, // vertikal und horizontal
-            {-1, -1}, {1, 1}, {-1, 1}, {1, -1} // diagonal
-        };
+	int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, // vertikal
+									 // und
+									 // horizontal
+		{ -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 } // diagonal
+	};
 
-		//geht durch alle mglichen richtungen durch und checkt falls etwas umgedreht werden muss
-        for (int[] direction : directions) {
+	// geht durch alle mglichen richtungen durch und checkt falls etwas
+	// umgedreht werden muss
+	for (int[] direction : directions) {
+	    if (xNewPiece + direction[0] >= 0 && xNewPiece + direction[0] < 8
+		    && yNewPiece + direction[1] >= 0
+		    && yNewPiece + direction[1] < 8) {
 
-            boolean opponentPieceFound = false; //true fals min. ein Stein des Gegners in die jeweilige Richtung gefunden wird (ohne Leere felder dazwischen)
+		boolean opponentPieceFound = false; // true fals min. ein Stein
+						    // des
+						    // Gegners in die jeweilige
+						    // Richtung gefunden wird
+						    // (ohne
+						    // Leere felder dazwischen)
+		int x = xNewPiece + direction[0];
+		int y = yNewPiece + direction[1];
 
-            int x = xNewPiece + direction[0];
-            int y = yNewPiece + direction[1];
+		// OpponentPieceFound muss nur einmal true gesetzt werden, wenn
+		// min. ein generischer Stein in die Richtung gefunden wird,
+		// um anschliesend wenn ein eigener Stein gefunden wird, zu
+		// bestaetigen dass auch min.
+		// ein gegnerischer Stein dazwischen liegt
+		if (getFieldOccupations()[x][y] == (isDarksTurn()
+			? Occupation.LIGHT
+			: Occupation.DARK)) {
+		    opponentPieceFound = true;
 
-				
-			//geht in die jeweilige Richtung bis ein eigener Stein gefunden wird
-            while (x >= 0 && x < 8 && y >= 0 && y < 8) { //damit nicht außerhalb des Spielfeldes gecheckt wird
+		    // wenn der neue Platz einen eigenen Stein hat und min. ein
+		    // gegnerischer Stein dazwischen liegt,
+		    // dann drehe alle diese gegnerischen Steine um
+		}
 
-                if (getFieldOccupations()[x][y] == Occupation.NONE) { 
-                    break;
-                }
+		// geht in die jeweilige Richtung bis ein eigener Stein gefunden
+		// wird
+		if (opponentPieceFound) {
+		    while (x >= 0 && x < 8 && y >= 0 && y < 8) { // damit nicht
+								 // außerhalb
+								 // des
+								 // Spielfeldes
+								 // gecheckt
+								 // wird
 
+			if (getFieldOccupations()[x][y] == Occupation.NONE) {
+			    break;
+			}
+			if (getFieldOccupations()[x][y] == (darksTurn
+				? Occupation.DARK
+				: Occupation.LIGHT)) {
 
-				//OpponentPieceFound muss nur einmal true gesetzt werden, wenn min. ein generischer Stein in die Richtung gefunden wird,
-				//um anschliesend wenn ein eigener Stein gefunden wird, zu bestaetigen dass auch min. 
-				//ein gegnerischer Stein dazwischen liegt
-                if (getFieldOccupations()[x][y] == (darksTurn ? Occupation.LIGHT : Occupation.DARK)) {
-                    opponentPieceFound = true; 
-					
+			    int flipX = xNewPiece + direction[0];
+			    int flipY = yNewPiece + direction[1];
 
-					//wenn der neue Platz einen eigenen Stein hat und min. ein gegnerischer Stein dazwischen liegt, 
-					//dann drehe alle diese gegnerischen Steine um
-                } else if (getFieldOccupations()[x][y] == (darksTurn ? Occupation.DARK : Occupation.LIGHT) && opponentPieceFound) { 
-					
-                    int flipX = xNewPiece + direction[0];
-                    int flipY = yNewPiece + direction[1];
+			    // flip sollange die Steine bis die Koordinaten des
+			    // eigenen
+			    // Steines erreicht werden
+			    while (flipX != x || flipY != y) {
+				updateFieldOccupation(flipX, flipY,
+					darksTurn ? Occupation.DARK
+						: Occupation.LIGHT);
+				flipX += direction[0];
+				flipY += direction[1];
+			    }
+			    atLeastOnePieceFlipped = true;
+			    break;
+			}
 
-					//flip sollange die Steine bis die Koordinaten des eigenen Steines erreicht werden
-                    while (flipX != x || flipY != y) {
-                        updateFieldOccupation(flipX, flipY, darksTurn ? Occupation.DARK : Occupation.LIGHT);
-                        flipX += direction[0];
-                        flipY += direction[1];
-                    }
-					atLeastOnePieceFlipped = true;
-                    break;
-                } 
-				
-				//geht in die jeweilige richtung weiter 
-                x += direction[0];
-                y += direction[1];
-            }
-        }
+			// geht in die jeweilige richtung weiter
+			x += direction[0];
+			y += direction[1];
+		    }
+		}
+	    }
+
+	}
 
 	return atLeastOnePieceFlipped;
-	
+
     }
 }
-
