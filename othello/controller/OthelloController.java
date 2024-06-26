@@ -35,6 +35,7 @@ public class OthelloController {
 
     public void initModel() {
 	setModel(new BoardModel(Occupation.startOccupations()));
+	getModel().updateLegalMoves();
     }
 
     public void initView() {
@@ -45,22 +46,18 @@ public class OthelloController {
 	getGUI().pack();
     }
 
-    public void onField(int xPosition, int yPosition) {
+    public void fieldClicked(int xPosition, int yPosition) {
 	// Wenn es einen legalen Zug gibt
-	if (getModel().isLegalMove()) {
+	if (getModel().getLegalMoveExists()) {
 	    // Wenn der ausgewählte Zug legal ist
 	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
-		if (getModel().isDarksTurn()) {
-		    updateFieldModel(xPosition, yPosition, Occupation.DARK);
-		    getModel().flipOccupations(xPosition, yPosition);
-		    updateFieldViews();
-		    getModel().switchTurns();
-		} else {
-		    updateFieldModel(xPosition, yPosition, Occupation.LIGHT);
-		    getModel().flipOccupations(xPosition, yPosition);
-		    updateFieldViews();
-		    getModel().switchTurns();
-		}
+		updateFieldModel(xPosition, yPosition,
+			(getModel().isDarksTurn() ? Occupation.DARK
+				: Occupation.LIGHT));
+		getModel().flipOccupations(xPosition, yPosition);
+		updateFieldViews();
+		getModel().switchTurns();
+		getModel().updateLegalMoves();
 	    }
 	} else {
 	    if (getModel().wasPassPlayed()) {
@@ -73,8 +70,9 @@ public class OthelloController {
 		getModel().switchTurns();
 	    }
 	}
-	// TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
     }
+
+    // TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
 
     public void updateFieldModel(int xPosition, int yPosition,
 	    Occupation occupation) {

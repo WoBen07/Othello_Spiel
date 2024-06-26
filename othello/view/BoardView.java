@@ -16,13 +16,15 @@ public class BoardView extends JPanel {
     private Occupation[][] fieldViewOccupations;
 
     public BoardView(OthelloGUI gui, Occupation[][] fieldViewOccupations) {
-	setFieldViews();
+	initFieldViews();
 
 	setGUI(gui);
 	setFieldViewOccupations(fieldViewOccupations);
 
 	setLayout(new GridLayout(8, 8));
+
 	addFieldViews();
+
     }
 
     private static boolean checkFieldViewOccupations(
@@ -51,7 +53,7 @@ public class BoardView extends JPanel {
 	return fieldViews;
     }
 
-    private void setFieldViews() {
+    private void initFieldViews() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
 		fieldViews[i][j] = new FieldView(this, i, j, Occupation.NONE);

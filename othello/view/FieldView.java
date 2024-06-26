@@ -10,7 +10,7 @@ import othello.Occupation;
 @SuppressWarnings("serial")
 public class FieldView extends JButton {
 
-    private static Color color = new Color(0, 128, 0);
+    private static Color backgroundColor = new Color(0, 128, 0);
 
     private final BoardView boardView;
     private final int xPosition;
@@ -28,7 +28,7 @@ public class FieldView extends JButton {
 	setPreferredSize(new Dimension(100, 100));
 
 	addActionListener(e -> getBoardView().getGUI().getController()
-		.onField(getXPosition(), getYPosition()));
+		.fieldClicked(getXPosition(), getYPosition()));
     }
 
     public BoardView getBoardView() {
@@ -51,7 +51,7 @@ public class FieldView extends JButton {
 	this.occupation = occupation;
 
 	if (occupation == Occupation.NONE) {
-	    setBackground(color);
+	    setBackground(backgroundColor);
 	} else if (occupation == Occupation.DARK) {
 	    setBackground(Color.BLACK);
 	} else {
