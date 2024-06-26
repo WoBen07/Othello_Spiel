@@ -56,6 +56,7 @@ public class OthelloController {
 				: Occupation.LIGHT));
 		getModel().flipOccupations(xPosition, yPosition);
 		updateFieldViews();
+		getModel().setPassPlayed(false);
 		getModel().switchTurns();
 		getModel().updateLegalMoves();
 	    }
