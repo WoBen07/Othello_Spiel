@@ -40,28 +40,20 @@ public class OthelloController {
     public void initView() {
 	setGUI(new OthelloGUI(this));
 	getGUI().setBoard(
-		new BoardView(getGUI(), getModel().getFieldOccupations()));
+		new BoardView(getGUI(), getModel().getFieldOccupations(), getModel().getLegalMoves()));
 	getGUI().add(getGUI().getBoard());
 	getGUI().pack();
     }
 
     public void onField(int xPosition, int yPosition) {
 	// Wenn es einen legalen Zug gibt
-	if (getModel().isLegalMove()) {
+	if (getModel().getLegalMoveExists()) {
 	    // Wenn der ausgewählte Zug legal ist
 	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
-		if (getModel().isDarksTurn()) {
-		    updateFieldModel(xPosition, yPosition, Occupation.DARK);
-		    getModel().flipOccupations(xPosition, yPosition);
-		    updateFieldViews();
-		    getModel().switchTurns();
-		} else {
-		    updateFieldModel(xPosition, yPosition, Occupation.LIGHT);
-		    getModel().flipOccupations(xPosition, yPosition);
-		    updateFieldViews();
-		    getModel().switchTurns();
-		}
-	    }
+				updateFieldModel(xPosition, yPosition, (getModel().isDarksTurn() ? Occupation.DARK : Occupation.LIGHT));
+				getModel().flipOccupations(xPosition, yPosition);
+				updateFieldViews();
+				getModel().switchTurns();
 	} else {
 	    if (getModel().wasPassPlayed()) {
 		JOptionPane.showMessageDialog(getGUI(), "Game End");
@@ -73,17 +65,19 @@ public class OthelloController {
 		getModel().switchTurns();
 	    }
 	}
+	}
+}
 	// TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
-    }
 
     public void updateFieldModel(int xPosition, int yPosition,
 	    Occupation occupation) {
 
 	getModel().updateFieldOccupation(xPosition, yPosition, occupation);
+	getModel().updateLegalMoves();
     }
 
     public void updateFieldViews() {
 	getGUI().getBoard()
-		.setFieldViewOccupations(getModel().getFieldOccupations());
+		.setFieldViewOccupations(getModel().getFieldOccupations(), getModel().getLegalMoves());
     }
 }
