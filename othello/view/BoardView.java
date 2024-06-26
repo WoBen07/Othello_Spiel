@@ -6,20 +6,20 @@ import java.util.Arrays;
 
 import javax.swing.JPanel;
 
-import othello.Occupation;
+import othello.Piece;
 
 @SuppressWarnings("serial")
 public class BoardView extends JPanel {
 
     private OthelloGUI gui;
     private final FieldView[][] fieldViews = new FieldView[8][8];
-    private Occupation[][] fieldViewOccupations;
+    private Piece[][] pieceFormation;
 
-    public BoardView(OthelloGUI gui, Occupation[][] fieldViewOccupations) {
+    public BoardView(OthelloGUI gui, Piece[][] pieceFormation) {
 	initFieldViews();
 
 	setGUI(gui);
-	setFieldViewOccupations(fieldViewOccupations);
+	setPieceFormation(pieceFormation);
 
 	setLayout(new GridLayout(8, 8));
 
@@ -27,14 +27,13 @@ public class BoardView extends JPanel {
 
     }
 
-    private static boolean checkFieldViewOccupations(
-	    Occupation[][] fieldViewOccupations) {
+    private static boolean checkPieceFormation(Piece[][] pieceFormation) {
 
-	if (fieldViewOccupations.length != 8) {
+	if (pieceFormation.length != 8) {
 	    return false;
 	}
 	for (int i = 0; i < 8; ++i) {
-	    if (fieldViewOccupations[i].length != 8) {
+	    if (pieceFormation[i].length != 8) {
 		return false;
 	    }
 	}
@@ -56,7 +55,7 @@ public class BoardView extends JPanel {
     private void initFieldViews() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fieldViews[i][j] = new FieldView(this, i, j, Occupation.NONE);
+		fieldViews[i][j] = new FieldView(this, i, j, Piece.NONE);
 	    }
 	}
     }
@@ -64,8 +63,7 @@ public class BoardView extends JPanel {
     private void updateFieldViews() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		getFieldViews()[i][j]
-			.setOccupation(getFieldViewOccupations()[i][j]);
+		getFieldViews()[i][j].setPiece(getPieceFormation()[i][j]);
 	    }
 	}
     }
@@ -76,16 +74,17 @@ public class BoardView extends JPanel {
 	});
     }
 
-    public Occupation[][] getFieldViewOccupations() {
-	return fieldViewOccupations;
+    public Piece[][] getPieceFormation() {
+	return pieceFormation;
     }
 
-    public void setFieldViewOccupations(Occupation[][] fieldViewOccupations) {
-	if (checkFieldViewOccupations(fieldViewOccupations)) {
-	    this.fieldViewOccupations = fieldViewOccupations;
+    public void setPieceFormation(Piece[][] pieceFormation) {
+	if (checkPieceFormation(pieceFormation)) {
+	    this.pieceFormation = pieceFormation;
 	    updateFieldViews();
 	} else {
-	    throw new IllegalArgumentException("64 occupation-details needed");
+	    throw new IllegalArgumentException(
+		    "pieceFormation does not include 8x8 pieces");
 	}
     }
 }

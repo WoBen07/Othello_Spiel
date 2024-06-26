@@ -1,20 +1,20 @@
 package othello.model;
 
-import othello.Occupation;
+import othello.Piece;
 
 public class FieldModel {
 
-    private Occupation occupation;
+    private Piece piece;
 
-    public FieldModel(Occupation occupation) {
-	setOccupation(occupation);
+    public FieldModel(Piece piece) {
+	setPiece(piece);
     }
 
-    public Occupation getOccupation() {
-	return occupation;
+    public Piece getPiece() {
+	return piece;
     }
 
-    public void setOccupation(Occupation occupation) {
-	this.occupation = occupation;
+    public void setPiece(Piece piece) {
+	this.piece = piece;
     }
 }

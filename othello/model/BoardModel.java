@@ -1,20 +1,20 @@
 package othello.model;
 
-import othello.Occupation;
+import othello.Piece;
 
 public class BoardModel {
 
     private final FieldModel[][] fields = new FieldModel[8][8];
-    private Occupation[][] fieldOccupations;
+    private Piece[][] pieceFormation;
     private boolean darksTurn = true;
     private boolean passPlayed = false;
     private boolean[][] legalMoves;
     private boolean hasLegalMove = false;
 
-    public BoardModel(Occupation[][] fieldOccupations) {
+    public BoardModel(Piece[][] pieceFormation) {
 	initFields();
 
-	setFieldOccupations(fieldOccupations);
+	setPieceFormation(pieceFormation);
 	updateLegalMoves();
     }
 
@@ -26,14 +26,13 @@ public class BoardModel {
 	return hasLegalMove;
     }
 
-    private static boolean checkFieldOccupations(
-	    Occupation[][] fieldOccupations) {
+    private static boolean checkPieceFormation(Piece[][] pieceFormation) {
 
-	if (fieldOccupations.length != 8) {
+	if (pieceFormation.length != 8) {
 	    return false;
 	}
 	for (int i = 0; i < 8; ++i) {
-	    if (fieldOccupations[i].length != 8) {
+	    if (pieceFormation[i].length != 8) {
 		return false;
 	    }
 	}
@@ -47,7 +46,7 @@ public class BoardModel {
     private void initFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fields[i][j] = new FieldModel(Occupation.NONE);
+		fields[i][j] = new FieldModel(Piece.NONE);
 	    }
 	}
     }
@@ -55,28 +54,28 @@ public class BoardModel {
     private void updateFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		getFields()[i][j].setOccupation(getFieldOccupations()[i][j]);
+		getFields()[i][j].setPiece(getPieceFormation()[i][j]);
 	    }
 	}
     }
 
-    public Occupation[][] getFieldOccupations() {
-	return fieldOccupations;
+    public Piece[][] getPieceFormation() {
+	return pieceFormation;
     }
 
-    public void setFieldOccupations(Occupation[][] fieldOccupations) {
-	if (checkFieldOccupations(fieldOccupations)) {
-	    this.fieldOccupations = fieldOccupations;
+    public void setPieceFormation(Piece[][] pieceFormation) {
+	if (checkPieceFormation(pieceFormation)) {
+	    this.pieceFormation = pieceFormation;
 	    updateFields();
 	} else {
 	    throw new IllegalArgumentException(
-		    "fieldOccupations does not contain 8x8 occupation-details");
+		    "pieceFormation does not include 8x8 pieces");
 	}
     }
 
-    public void updateFieldOccupation(int xPosition, int yPosition,
-	    Occupation occupation) {
-	getFieldOccupations()[xPosition][yPosition] = occupation;
+    public void updatePieceFormation(int xPosition, int yPosition,
+	    Piece newPiece) {
+	getPieceFormation()[xPosition][yPosition] = newPiece;
 	updateFields();
     }
 
@@ -118,18 +117,18 @@ public class BoardModel {
     }
 
     private boolean isLegalMove(int x, int y) {
-	if (getFieldOccupations()[x][y] == Occupation.NONE) {
+	if (getPieceFormation()[x][y] == Piece.NONE) {
 	    return checkMove(x, y, false);
 	}
 	return false;
     }
 
-    public void flipOccupations(int xNewPiece, int yNewPiece) {
+    public void flipPieces(int xNewPiece, int yNewPiece) {
 	checkMove(xNewPiece, yNewPiece, true);
     }
 
     private boolean checkMove(int xNewPiece, int yNewPiece,
-	    boolean flipOccupations) {
+	    boolean flipPieces) {
 
 	boolean atLeastOnePieceFlipped = false;
 
@@ -160,9 +159,8 @@ public class BoardModel {
 		// um anschliesend wenn ein eigener Stein gefunden wird, zu
 		// bestaetigen dass auch min.
 		// ein gegnerischer Stein dazwischen liegt
-		if (getFieldOccupations()[x][y] == (isDarksTurn()
-			? Occupation.LIGHT
-			: Occupation.DARK)) {
+		if (getPieceFormation()[x][y] == (isDarksTurn() ? Piece.LIGHT
+			: Piece.DARK)) {
 		    opponentPieceFound = true;
 
 		    // wenn der neue Platz einen eigenen Stein hat und min. ein
@@ -180,12 +178,12 @@ public class BoardModel {
 								 // gecheckt
 								 // wird
 
-			if (getFieldOccupations()[x][y] == Occupation.NONE) {
+			if (getPieceFormation()[x][y] == Piece.NONE) {
 			    break;
 			}
-			if (getFieldOccupations()[x][y] == (darksTurn
-				? Occupation.DARK
-				: Occupation.LIGHT)) {
+			if (getPieceFormation()[x][y] == (darksTurn
+				? Piece.DARK
+				: Piece.LIGHT)) {
 
 			    int flipX = xNewPiece + direction[0];
 			    int flipY = yNewPiece + direction[1];
@@ -193,11 +191,11 @@ public class BoardModel {
 			    // flip sollange die Steine bis die Koordinaten des
 			    // eigenen
 			    // Steines erreicht werden
-			    if (flipOccupations) {
+			    if (flipPieces) {
 				while (flipX != x || flipY != y) {
-				    updateFieldOccupation(flipX, flipY,
-					    darksTurn ? Occupation.DARK
-						    : Occupation.LIGHT);
+				    updatePieceFormation(flipX, flipY,
+					    darksTurn ? Piece.DARK
+						    : Piece.LIGHT);
 				    flipX += direction[0];
 				    flipY += direction[1];
 				}

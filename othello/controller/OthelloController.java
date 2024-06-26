@@ -2,7 +2,7 @@ package othello.controller;
 
 import javax.swing.JOptionPane;
 
-import othello.Occupation;
+import othello.Piece;
 import othello.model.BoardModel;
 import othello.view.BoardView;
 import othello.view.OthelloGUI;
@@ -34,14 +34,14 @@ public class OthelloController {
     }
 
     public void initModel() {
-	setModel(new BoardModel(Occupation.startOccupations()));
+	setModel(new BoardModel(Piece.startFormation()));
 	getModel().updateLegalMoves();
     }
 
     public void initView() {
 	setGUI(new OthelloGUI(this));
 	getGUI().setBoard(
-		new BoardView(getGUI(), getModel().getFieldOccupations()));
+		new BoardView(getGUI(), getModel().getPieceFormation()));
 	getGUI().add(getGUI().getBoard());
 	getGUI().pack();
     }
@@ -52,9 +52,8 @@ public class OthelloController {
 	    // Wenn der ausgewählte Zug legal ist
 	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
 		updateFieldModel(xPosition, yPosition,
-			(getModel().isDarksTurn() ? Occupation.DARK
-				: Occupation.LIGHT));
-		getModel().flipOccupations(xPosition, yPosition);
+			(getModel().isDarksTurn() ? Piece.DARK : Piece.LIGHT));
+		getModel().flipPieces(xPosition, yPosition);
 		updateFieldViews();
 		getModel().setPassPlayed(false);
 		getModel().switchTurns();
@@ -80,14 +79,12 @@ public class OthelloController {
 
     // TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
 
-    public void updateFieldModel(int xPosition, int yPosition,
-	    Occupation occupation) {
+    public void updateFieldModel(int xPosition, int yPosition, Piece newPiece) {
 
-	getModel().updateFieldOccupation(xPosition, yPosition, occupation);
+	getModel().updatePieceFormation(xPosition, yPosition, newPiece);
     }
 
     public void updateFieldViews() {
-	getGUI().getBoard()
-		.setFieldViewOccupations(getModel().getFieldOccupations());
+	getGUI().getBoard().setPieceFormation(getModel().getPieceFormation());
     }
 }
