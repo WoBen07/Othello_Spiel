@@ -117,12 +117,17 @@ public class BoardModel {
 
     private boolean isLegalMove(int x, int y) {
 	if (getFieldOccupations()[x][y] == Occupation.NONE) {
-	    return flipOccupations(x, y);
+	    return checkMove(x, y, false);
 	}
 	return false;
     }
 
-    public boolean flipOccupations(int xNewPiece, int yNewPiece) {
+    public void flipOccupations(int xNewPiece, int yNewPiece) {
+	checkMove(xNewPiece, yNewPiece, true);
+    }
+
+    private boolean checkMove(int xNewPiece, int yNewPiece,
+	    boolean flipOccupations) {
 
 	boolean atLeastOnePieceFlipped = false;
 
@@ -186,12 +191,14 @@ public class BoardModel {
 			    // flip sollange die Steine bis die Koordinaten des
 			    // eigenen
 			    // Steines erreicht werden
-			    while (flipX != x || flipY != y) {
-				updateFieldOccupation(flipX, flipY,
-					darksTurn ? Occupation.DARK
-						: Occupation.LIGHT);
-				flipX += direction[0];
-				flipY += direction[1];
+			    if (flipOccupations) {
+				while (flipX != x || flipY != y) {
+				    updateFieldOccupation(flipX, flipY,
+					    darksTurn ? Occupation.DARK
+						    : Occupation.LIGHT);
+				    flipX += direction[0];
+				    flipY += direction[1];
+				}
 			    }
 			    atLeastOnePieceFlipped = true;
 			    break;
