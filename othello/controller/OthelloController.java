@@ -48,7 +48,7 @@ public class OthelloController {
 
     public void fieldClicked(int xPosition, int yPosition) {
 	// Wenn es einen legalen Zug gibt
-	if (getModel().getLegalMoveExists()) {
+	if (getModel().hasLegalMoves()) {
 	    // Wenn der ausgewählte Zug legal ist
 	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
 		updateFieldModel(xPosition, yPosition,
@@ -68,8 +68,13 @@ public class OthelloController {
 			JOptionPane.INFORMATION_MESSAGE);
 		getModel().setPassPlayed(true);
 		getModel().switchTurns();
+		getModel().updateLegalMoves();
+		if (!getModel().hasLegalMoves()) {
+		    JOptionPane.showMessageDialog(getGUI(), "Game End");
+		}
 	    }
 	}
+
     }
 
     // TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte

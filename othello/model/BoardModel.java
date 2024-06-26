@@ -9,7 +9,7 @@ public class BoardModel {
     private boolean darksTurn = true;
     private boolean passPlayed = false;
     private boolean[][] legalMoves;
-    private boolean legalMoveExists = false;
+    private boolean hasLegalMove = false;
 
     public BoardModel(Occupation[][] fieldOccupations) {
 	initFields();
@@ -22,8 +22,8 @@ public class BoardModel {
 	return legalMoves;
     }
 
-    public boolean getLegalMoveExists() {
-	return legalMoveExists;
+    public boolean hasLegalMoves() {
+	return hasLegalMove;
     }
 
     private static boolean checkFieldOccupations(
@@ -103,15 +103,17 @@ public class BoardModel {
     // sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer
     // variable gespeichert werden
     public void updateLegalMoves() {
+	hasLegalMove = false;
 	boolean[][] tempLegalMoves = new boolean[8][8];
 	for (int i = 0; i < 8; i++) {
 	    for (int j = 0; j < 8; j++) {
 		tempLegalMoves[i][j] = (isLegalMove(i, j));
 		if (tempLegalMoves[i][j]) {
-		    legalMoveExists = true;
+		    hasLegalMove = true;
 		}
 	    }
 	}
+
 	this.legalMoves = tempLegalMoves;
     }
 
