@@ -110,6 +110,8 @@ public class BoardModel implements Serializable {
 	} else {
 	    darksTurn = true;
 	}
+
+	updateLegalMoves();
     }
 
     private boolean checkMove(int xNewPiece, int yNewPiece,

@@ -24,7 +24,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	pack();
 	setVisible(true);
     }
-    
+
     public OthelloGUI(OthelloController controller, BoardView board) {
 	this(controller);
 	setBoard(board);
@@ -44,6 +44,10 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
     public void setBoard(BoardView board) {
 	this.board = board;
+    }
+
+    public void fieldClicked(int xPosition, int yPosition) {
+	controller.fieldClicked(xPosition, yPosition);
     }
 
     @Override
