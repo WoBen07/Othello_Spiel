@@ -112,8 +112,6 @@ public class BoardModel implements Serializable {
     private boolean checkMove(int xNewPiece, int yNewPiece,
 	    boolean flipPieces) {
 
-	boolean atLeastOnePieceFlipped = false;
-
 	int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 },
 		{ -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 } };
 
@@ -146,9 +144,10 @@ public class BoardModel implements Serializable {
 				    flipX += direction[0];
 				    flipY += direction[1];
 				}
+				break;
+			    } else {
+				return true;
 			    }
-			    atLeastOnePieceFlipped = true;
-			    break;
 			}
 			x += direction[0];
 			y += direction[1];
@@ -156,7 +155,7 @@ public class BoardModel implements Serializable {
 		}
 	    }
 	}
-	return atLeastOnePieceFlipped;
+	return false;
     }
 
     private boolean isLegalMove(int x, int y) {
