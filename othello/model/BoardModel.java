@@ -123,15 +123,15 @@ public class BoardModel implements Serializable {
 		int x = xNewPiece + direction[0];
 		int y = yNewPiece + direction[1];
 
-		if (getPieceFormation()[x][y] == (isDarksTurn() ? Piece.LIGHT
-			: Piece.DARK)) {
+		if (getPieceFormation()[x][y]
+			.equals(isDarksTurn() ? Piece.LIGHT : Piece.DARK)) {
 
 		    while (x >= 0 && x < 8 && y >= 0 && y < 8) {
-			if (getPieceFormation()[x][y] == Piece.NONE) {
+			if (getPieceFormation()[x][y].equals(Piece.NONE)) {
 			    break;
 			}
-			if (getPieceFormation()[x][y] == (darksTurn ? Piece.DARK
-				: Piece.LIGHT)) {
+			if (getPieceFormation()[x][y]
+				.equals(darksTurn ? Piece.DARK : Piece.LIGHT)) {
 
 			    if (flipPieces) {
 				int flipX = xNewPiece + direction[0];
@@ -159,7 +159,7 @@ public class BoardModel implements Serializable {
     }
 
     private boolean isLegalMove(int x, int y) {
-	if (getPieceFormation()[x][y] == Piece.NONE) {
+	if (getPieceFormation()[x][y].equals(Piece.NONE)) {
 	    return checkMove(x, y, false);
 	}
 	return false;
