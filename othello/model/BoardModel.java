@@ -135,10 +135,11 @@ public class BoardModel implements Serializable {
 			if (getPieceFormation()[x][y] == (darksTurn ? Piece.DARK
 				: Piece.LIGHT)) {
 
-			    int flipX = xNewPiece + direction[0];
-			    int flipY = yNewPiece + direction[1];
 			    if (flipPieces) {
-				while (flipX != x || flipY != y) {
+				int flipX = xNewPiece + direction[0];
+				int flipY = yNewPiece + direction[1];
+
+				while (!(flipX == x && flipY == y)) {
 				    updatePieceFormation(flipX, flipY,
 					    darksTurn ? Piece.DARK
 						    : Piece.LIGHT);
