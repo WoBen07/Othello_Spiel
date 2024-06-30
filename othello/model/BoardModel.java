@@ -22,16 +22,12 @@ public class BoardModel implements Serializable {
 
     public BoardModel() {
 	initFields();
-
 	setPieceFormation(Piece.startFormation());
-	updateLegalMoves();
     }
 
     public BoardModel(Piece[][] pieceFormation) {
 	initFields();
-
 	setPieceFormation(pieceFormation);
-	updateLegalMoves();
     }
 
     public void addPropertyChangeListener(PropertyChangeListener l) {
@@ -84,6 +80,7 @@ public class BoardModel implements Serializable {
 	if (checkPieceFormation(pieceFormation)) {
 	    this.pieceFormation = pieceFormation;
 	    updateFields();
+	    updateLegalMoves();
 	    firePropertyChange("pieceFormation", null, pieceFormation);
 	} else {
 	    throw new IllegalArgumentException(
@@ -96,6 +93,7 @@ public class BoardModel implements Serializable {
 
 	pieceFormation[xPosition][yPosition] = newPiece;
 	updateFields();
+	updateLegalMoves();
 	firePropertyChange("pieceFormation", null, getPieceFormation());
     }
 
@@ -115,22 +113,21 @@ public class BoardModel implements Serializable {
 	    boolean flipPieces) {
 
 	boolean atLeastOnePieceFlipped = false;
+
 	int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 },
 		{ -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 } };
+
 	for (int[] direction : directions) {
 	    if (xNewPiece + direction[0] >= 0 && xNewPiece + direction[0] < 8
 		    && yNewPiece + direction[1] >= 0
 		    && yNewPiece + direction[1] < 8) {
 
-		boolean opponentPieceFound = false;
 		int x = xNewPiece + direction[0];
 		int y = yNewPiece + direction[1];
+
 		if (getPieceFormation()[x][y] == (isDarksTurn() ? Piece.LIGHT
 			: Piece.DARK)) {
 
-		    opponentPieceFound = true;
-		}
-		if (opponentPieceFound) {
 		    while (x >= 0 && x < 8 && y >= 0 && y < 8) {
 			if (getPieceFormation()[x][y] == Piece.NONE) {
 			    break;
