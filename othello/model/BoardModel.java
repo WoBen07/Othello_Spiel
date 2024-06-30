@@ -144,10 +144,10 @@ public class BoardModel implements Serializable {
 				    flipX += direction[0];
 				    flipY += direction[1];
 				}
-				break;
 			    } else {
 				return true;
 			    }
+			    break;
 			}
 			x += direction[0];
 			y += direction[1];
