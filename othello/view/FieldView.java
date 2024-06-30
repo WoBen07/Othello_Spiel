@@ -12,7 +12,6 @@ public class FieldView extends JButton {
 
     private static Color backgroundColor = new Color(0, 128, 0);
 
-    private final BoardView boardView;
     private final int xPosition;
     private final int yPosition;
     private Piece piece;
@@ -20,7 +19,6 @@ public class FieldView extends JButton {
     public FieldView(BoardView boardView, int xPosition, int yPosition,
 	    Piece piece) {
 
-	this.boardView = boardView;
 	this.xPosition = xPosition;
 	this.yPosition = yPosition;
 	setPiece(piece);
@@ -29,10 +27,6 @@ public class FieldView extends JButton {
 
 	addActionListener(
 		e -> boardView.fieldClicked(getXPosition(), getYPosition()));
-    }
-
-    public BoardView getBoardView() {
-	return new BoardView(boardView.getGUI(), boardView.getPieceFormation());
     }
 
     public int getXPosition() {
