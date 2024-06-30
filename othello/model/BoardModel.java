@@ -10,12 +10,14 @@ import othello.Piece;
 @SuppressWarnings("serial")
 public class BoardModel implements Serializable {
 
-    private final FieldModel[][] fields = new FieldModel[8][8];
     private Piece[][] pieceFormation;
+    private final FieldModel[][] fields = new FieldModel[8][8];
     private boolean darksTurn = true;
-    private boolean passPlayed = false;
     private boolean[][] legalMoves;
     private boolean hasLegalMove = false;
+    private boolean passPlayed = false;
+    private boolean running = true;
+
     private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public BoardModel() {
