@@ -59,10 +59,6 @@ public class BoardModel implements Serializable {
 	return true;
     }
 
-    private FieldModel[][] getFields() {
-	return fields;
-    }
-
     private void initFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
@@ -74,7 +70,7 @@ public class BoardModel implements Serializable {
     private void updateFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		getFields()[i][j].setPiece(getPieceFormation()[i][j]);
+		fields[i][j].setPiece(getPieceFormation()[i][j]);
 	    }
 	}
     }
@@ -97,7 +93,7 @@ public class BoardModel implements Serializable {
 
     public void updatePieceFormation(int xPosition, int yPosition,
 	    Piece newPiece) {
-	getPieceFormation()[xPosition][yPosition] = newPiece;
+	pieceFormation[xPosition][yPosition] = newPiece;
 	updateFields();
     }
 
@@ -217,7 +213,7 @@ public class BoardModel implements Serializable {
     }
 
     public boolean[][] getLegalMoves() {
-	return legalMoves;
+	return Arrays.copyOf(legalMoves, legalMoves.length);
     }
 
     // sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer
