@@ -10,15 +10,18 @@ import othello.Piece;
 @SuppressWarnings("serial")
 public class BoardModel implements Serializable {
 
-    private Piece[][] pieceFormation;
+    private static int SIZE_X = 8;
+    private static int SIZE_Y = 8;
+
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
+
     private final FieldModel[][] fields = new FieldModel[8][8];
+    private Piece[][] pieceFormation;
     private boolean darksTurn = true;
     private boolean[][] legalMoves;
     private boolean hasLegalMove = false;
     private boolean passPlayed = false;
     private boolean running = true;
-
-    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public BoardModel() {
 	initFields();
@@ -49,7 +52,6 @@ public class BoardModel implements Serializable {
     }
 
     private static boolean checkPieceFormation(Piece[][] pieceFormation) {
-
 	if (pieceFormation.length != 8) {
 	    return false;
 	}
