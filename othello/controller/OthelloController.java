@@ -77,8 +77,6 @@ public class OthelloController {
 
     }
 
-    // TODO Benutzerinformation, dass er einen falschen Zug auswählen wollte
-
     public void updateFieldModel(int xPosition, int yPosition, Piece newPiece) {
 
 	getModel().updatePieceFormation(xPosition, yPosition, newPiece);

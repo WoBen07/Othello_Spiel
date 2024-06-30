@@ -1,8 +1,14 @@
 package othello.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
+import java.util.Arrays;
+
 import othello.Piece;
 
-public class BoardModel {
+@SuppressWarnings("serial")
+public class BoardModel implements Serializable {
 
     private final FieldModel[][] fields = new FieldModel[8][8];
     private Piece[][] pieceFormation;
@@ -10,6 +16,14 @@ public class BoardModel {
     private boolean passPlayed = false;
     private boolean[][] legalMoves;
     private boolean hasLegalMove = false;
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
+
+    public BoardModel() {
+	initFields();
+
+	setPieceFormation(Piece.startFormation());
+	updateLegalMoves();
+    }
 
     public BoardModel(Piece[][] pieceFormation) {
 	initFields();
@@ -18,12 +32,18 @@ public class BoardModel {
 	updateLegalMoves();
     }
 
-    public boolean[][] getLegalMoves() {
-	return legalMoves;
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+	changes.addPropertyChangeListener(l);
     }
 
-    public boolean hasLegalMoves() {
-	return hasLegalMove;
+    public void removePropertyChangeListener(PropertyChangeListener l) {
+	changes.removePropertyChangeListener(l);
+    }
+
+    public void firePropertyChange(String propertyName, Object oldValue,
+	    Object newValue) {
+
+	changes.firePropertyChange(propertyName, oldValue, newValue);
     }
 
     private static boolean checkPieceFormation(Piece[][] pieceFormation) {
@@ -39,7 +59,7 @@ public class BoardModel {
 	return true;
     }
 
-    public FieldModel[][] getFields() {
+    private FieldModel[][] getFields() {
 	return fields;
     }
 
@@ -60,13 +80,15 @@ public class BoardModel {
     }
 
     public Piece[][] getPieceFormation() {
-	return pieceFormation;
+	return Arrays.copyOf(pieceFormation, pieceFormation.length);
     }
 
     public void setPieceFormation(Piece[][] pieceFormation) {
 	if (checkPieceFormation(pieceFormation)) {
+	    Piece[][] oldValue = getPieceFormation();
 	    this.pieceFormation = pieceFormation;
 	    updateFields();
+	    firePropertyChange("pieceFormation", oldValue, pieceFormation);
 	} else {
 	    throw new IllegalArgumentException(
 		    "pieceFormation does not include 8x8 pieces");
@@ -97,34 +119,6 @@ public class BoardModel {
 
     public void setPassPlayed(boolean passPlayed) {
 	this.passPlayed = passPlayed;
-    }
-
-    // sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer
-    // variable gespeichert werden
-    public void updateLegalMoves() {
-	hasLegalMove = false;
-	boolean[][] tempLegalMoves = new boolean[8][8];
-	for (int i = 0; i < 8; i++) {
-	    for (int j = 0; j < 8; j++) {
-		tempLegalMoves[i][j] = (isLegalMove(i, j));
-		if (tempLegalMoves[i][j]) {
-		    hasLegalMove = true;
-		}
-	    }
-	}
-
-	this.legalMoves = tempLegalMoves;
-    }
-
-    private boolean isLegalMove(int x, int y) {
-	if (getPieceFormation()[x][y] == Piece.NONE) {
-	    return checkMove(x, y, false);
-	}
-	return false;
-    }
-
-    public void flipPieces(int xNewPiece, int yNewPiece) {
-	checkMove(xNewPiece, yNewPiece, true);
     }
 
     private boolean checkMove(int xNewPiece, int yNewPiece,
@@ -181,8 +175,7 @@ public class BoardModel {
 			if (getPieceFormation()[x][y] == Piece.NONE) {
 			    break;
 			}
-			if (getPieceFormation()[x][y] == (darksTurn
-				? Piece.DARK
+			if (getPieceFormation()[x][y] == (darksTurn ? Piece.DARK
 				: Piece.LIGHT)) {
 
 			    int flipX = xNewPiece + direction[0];
@@ -214,6 +207,41 @@ public class BoardModel {
 	}
 
 	return atLeastOnePieceFlipped;
+    }
 
+    private boolean isLegalMove(int x, int y) {
+	if (getPieceFormation()[x][y] == Piece.NONE) {
+	    return checkMove(x, y, false);
+	}
+	return false;
+    }
+
+    public boolean[][] getLegalMoves() {
+	return legalMoves;
+    }
+
+    // sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer
+    // variable gespeichert werden
+    public void updateLegalMoves() {
+	hasLegalMove = false;
+	boolean[][] tempLegalMoves = new boolean[8][8];
+	for (int i = 0; i < 8; i++) {
+	    for (int j = 0; j < 8; j++) {
+		tempLegalMoves[i][j] = (isLegalMove(i, j));
+		if (tempLegalMoves[i][j]) {
+		    hasLegalMove = true;
+		}
+	    }
+	}
+
+	this.legalMoves = tempLegalMoves;
+    }
+
+    public boolean hasLegalMoves() {
+	return hasLegalMove;
+    }
+
+    public void flipPieces(int xNewPiece, int yNewPiece) {
+	checkMove(xNewPiece, yNewPiece, true);
     }
 }
