@@ -54,7 +54,6 @@ public class OthelloController {
 		updateFieldModel(xPosition, yPosition,
 			(getModel().isDarksTurn() ? Piece.DARK : Piece.LIGHT));
 		getModel().flipPieces(xPosition, yPosition);
-		updateFieldViews();
 		getModel().setPassPlayed(false);
 		getModel().switchTurns();
 		getModel().updateLegalMoves();
@@ -80,9 +79,5 @@ public class OthelloController {
     public void updateFieldModel(int xPosition, int yPosition, Piece newPiece) {
 
 	getModel().updatePieceFormation(xPosition, yPosition, newPiece);
-    }
-
-    public void updateFieldViews() {
-	getGUI().getBoard().setPieceFormation(getModel().getPieceFormation());
     }
 }

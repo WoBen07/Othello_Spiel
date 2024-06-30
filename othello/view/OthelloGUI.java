@@ -1,11 +1,15 @@
 package othello.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JFrame;
 
+import othello.Piece;
 import othello.controller.OthelloController;
 
 @SuppressWarnings("serial")
-public class OthelloGUI extends JFrame {
+public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
     private OthelloController controller;
     private BoardView board;
@@ -14,6 +18,7 @@ public class OthelloGUI extends JFrame {
 	super("Othello");
 
 	setController(controller);
+	controller.getModel().addPropertyChangeListener(this);
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -36,5 +41,12 @@ public class OthelloGUI extends JFrame {
 
     public void setBoard(BoardView board) {
 	this.board = board;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+	if (evt.getPropertyName().equalsIgnoreCase("pieceFormation")) {
+	    getBoard().setPieceFormation((Piece[][])evt.getNewValue());
+	}
     }
 }

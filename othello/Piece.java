@@ -7,7 +7,7 @@ public enum Piece {
 
     public static void fill(Piece[][] a, Piece val) {
 	for (int i = 0; i < a.length; ++i) {
-	    Arrays.fill(a, val);
+	    Arrays.fill(a[i], val);
 	}
     }
 

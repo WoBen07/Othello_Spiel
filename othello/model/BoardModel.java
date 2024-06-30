@@ -81,10 +81,9 @@ public class BoardModel implements Serializable {
 
     public void setPieceFormation(Piece[][] pieceFormation) {
 	if (checkPieceFormation(pieceFormation)) {
-	    Piece[][] oldValue = getPieceFormation();
 	    this.pieceFormation = pieceFormation;
 	    updateFields();
-	    firePropertyChange("pieceFormation", oldValue, pieceFormation);
+	    firePropertyChange("pieceFormation", null, pieceFormation);
 	} else {
 	    throw new IllegalArgumentException(
 		    "pieceFormation does not include 8x8 pieces");
@@ -93,8 +92,10 @@ public class BoardModel implements Serializable {
 
     public void updatePieceFormation(int xPosition, int yPosition,
 	    Piece newPiece) {
+
 	pieceFormation[xPosition][yPosition] = newPiece;
 	updateFields();
+	firePropertyChange("pieceFormation", null, getPieceFormation());
     }
 
     public boolean isDarksTurn() {
