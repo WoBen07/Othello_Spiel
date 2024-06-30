@@ -79,6 +79,7 @@ public class BoardModel implements Serializable {
     public void setPieceFormation(Piece[][] pieceFormation) {
 	if (checkPieceFormation(pieceFormation)) {
 	    this.pieceFormation = pieceFormation;
+
 	    updateFields();
 	    updateLegalMoves();
 	    firePropertyChange("pieceFormation", null, pieceFormation);
@@ -92,6 +93,7 @@ public class BoardModel implements Serializable {
 	    Piece newPiece) {
 
 	pieceFormation[xPosition][yPosition] = newPiece;
+
 	updateFields();
 	updateLegalMoves();
 	firePropertyChange("pieceFormation", null, getPieceFormation());
@@ -169,11 +171,11 @@ public class BoardModel implements Serializable {
 	return Arrays.copyOf(legalMoves, legalMoves.length);
     }
 
-    // sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer
-    // variable gespeichert werden
-    public void updateLegalMoves() {
+    private void updateLegalMoves() {
 	hasLegalMove = false;
+
 	boolean[][] tempLegalMoves = new boolean[8][8];
+
 	for (int i = 0; i < 8; i++) {
 	    for (int j = 0; j < 8; j++) {
 		tempLegalMoves[i][j] = (isLegalMove(i, j));
@@ -182,7 +184,6 @@ public class BoardModel implements Serializable {
 		}
 	    }
 	}
-
 	this.legalMoves = tempLegalMoves;
     }
 
@@ -196,6 +197,16 @@ public class BoardModel implements Serializable {
 
     public void setPassPlayed(boolean passPlayed) {
 	this.passPlayed = passPlayed;
+    }
+
+    public boolean isGameOver() {
+	return !running;
+    }
+
+    public void stopGame() {
+	running = false;
+
+	firePropertyChange("running", true, false);
     }
 
     public void flipPieces(int xNewPiece, int yNewPiece) {
