@@ -35,7 +35,6 @@ public class OthelloController {
 
     public void initModel() {
 	setModel(new BoardModel(Piece.startFormation()));
-	getModel().updateLegalMoves();
     }
 
     public void initView() {
@@ -56,7 +55,6 @@ public class OthelloController {
 		getModel().flipPieces(xPosition, yPosition);
 		getModel().setPassPlayed(false);
 		getModel().switchTurns();
-		getModel().updateLegalMoves();
 	    }
 	} else {
 	    if (getModel().wasPassPlayed()) {
@@ -67,7 +65,6 @@ public class OthelloController {
 			JOptionPane.INFORMATION_MESSAGE);
 		getModel().setPassPlayed(true);
 		getModel().switchTurns();
-		getModel().updateLegalMoves();
 		if (!getModel().hasLegalMoves()) {
 		    JOptionPane.showMessageDialog(getGUI(), "Game End");
 		}

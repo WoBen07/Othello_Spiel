@@ -21,9 +21,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	controller.getModel().addPropertyChangeListener(this);
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 	pack();
-
 	setVisible(true);
     }
 
@@ -46,7 +44,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 	if (evt.getPropertyName().equalsIgnoreCase("pieceFormation")) {
-	    getBoard().setPieceFormation((Piece[][])evt.getNewValue());
+	    board.setPieceFormation((Piece[][])evt.getNewValue());
 	}
     }
 }

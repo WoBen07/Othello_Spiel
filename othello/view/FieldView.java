@@ -27,8 +27,8 @@ public class FieldView extends JButton {
 
 	setPreferredSize(new Dimension(100, 100));
 
-	addActionListener(e -> getBoardView().getGUI().getController()
-		.fieldClicked(getXPosition(), getYPosition()));
+	addActionListener(
+		e -> boardView.fieldClicked(getXPosition(), getYPosition()));
     }
 
     public BoardView getBoardView() {
