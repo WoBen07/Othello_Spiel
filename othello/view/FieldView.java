@@ -32,7 +32,7 @@ public class FieldView extends JButton {
     }
 
     public BoardView getBoardView() {
-	return boardView;
+	return new BoardView(boardView.getGUI(), boardView.getPieceFormation());
     }
 
     public int getXPosition() {

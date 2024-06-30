@@ -17,12 +17,10 @@ public class BoardView extends JPanel {
 
     public BoardView(OthelloGUI gui, Piece[][] pieceFormation) {
 	initFieldViews();
-
 	setGUI(gui);
 	setPieceFormation(pieceFormation);
 
 	setLayout(new GridLayout(8, 8));
-
 	addFieldViews();
 
     }
