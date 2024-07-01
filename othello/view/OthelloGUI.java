@@ -35,7 +35,13 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     }
 
     public void setBoard(BoardView board) {
+	if (board != null) {
+	    remove(this.board);
+	}
+
 	this.board = board;
+	add(board);
+	pack();
     }
 
     public void fieldClicked(int xPosition, int yPosition) {

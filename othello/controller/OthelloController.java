@@ -41,7 +41,6 @@ public class OthelloController {
 	setGUI(new OthelloGUI(this));
 	getGUI().setBoard(
 		new BoardView(getGUI(), getModel().getPieceFormation()));
-	getGUI().add(getGUI().getBoard());
 	getGUI().pack();
     }
 
