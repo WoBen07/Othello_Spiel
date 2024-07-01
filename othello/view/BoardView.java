@@ -12,16 +12,16 @@ import othello.Piece;
 public class BoardView extends JPanel {
 
     private OthelloGUI gui;
-    private final FieldView[][] fieldViews = new FieldView[8][8];
+    private final FieldView[][] fields = new FieldView[8][8];
     private Piece[][] pieceFormation;
 
     public BoardView(OthelloGUI gui, Piece[][] pieceFormation) {
-	initFieldViews();
+	initFields();
 	setGUI(gui);
 	setPieceFormation(pieceFormation);
 
 	setLayout(new GridLayout(8, 8));
-	addFieldViews();
+	addFields();
 
     }
 
@@ -41,24 +41,24 @@ public class BoardView extends JPanel {
 	this.gui = gui;
     }
 
-    private void initFieldViews() {
+    private void initFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fieldViews[i][j] = new FieldView(this, i, j, Piece.NONE);
+		fields[i][j] = new FieldView(this, i, j, Piece.NONE);
 	    }
 	}
     }
 
-    private void updateFieldViews() {
+    private void updateFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fieldViews[i][j].setPiece(getPieceFormation()[i][j]);
+		fields[i][j].setPiece(getPieceFormation()[i][j]);
 	    }
 	}
     }
 
-    private void addFieldViews() {
-	Arrays.stream(fieldViews).forEach((FieldView[] row) -> {
+    private void addFields() {
+	Arrays.stream(fields).forEach((FieldView[] row) -> {
 	    Arrays.stream(row).forEach(field -> add(field));
 	});
     }
@@ -71,7 +71,7 @@ public class BoardView extends JPanel {
 	if (checkPieceFormation(pieceFormation)) {
 	    this.pieceFormation = pieceFormation;
 
-	    updateFieldViews();
+	    updateFields();
 	} else {
 	    throw new IllegalArgumentException(
 		    "pieceFormation does not include 8x8 pieces");
