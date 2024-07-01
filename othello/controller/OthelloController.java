@@ -46,22 +46,17 @@ public class OthelloController {
 		model.setPassPlayed(false);
 		model.switchTurns();
 	    }
+	} else if (model.wasPassPlayed()) {
+	    model.stopGame();
 	} else {
-	    if (model.wasPassPlayed()) {
-		JOptionPane.showMessageDialog(gui, "Game End"); // TODO mit
-								// stopGame()
-								// vom Model
-	    } else {
-		JOptionPane.showMessageDialog(gui,
-			"No legal moves, you have to pass");
-		model.setPassPlayed(true);
-		model.switchTurns();
-		if (!model.hasLegalMoves()) {
-		    JOptionPane.showMessageDialog(gui, "Game End");
-		}
+	    JOptionPane.showMessageDialog(gui,
+		    "No legal moves, you have to pass");
+	    model.setPassPlayed(true);
+	    model.switchTurns();
+	    if (!model.hasLegalMoves()) {
+		JOptionPane.showMessageDialog(gui, "Game End");
 	    }
 	}
-
     }
 
     public void updateFieldModel(int xPosition, int yPosition, Piece newPiece) {

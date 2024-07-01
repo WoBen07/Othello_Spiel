@@ -8,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import othello.Piece;
 import othello.controller.OthelloController;
@@ -39,6 +40,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
     public void showBoard() {
 	components.forEach(c -> remove(c));
+	components.clear();
 
 	add(board);
 	components.add(board);
@@ -54,6 +56,17 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
 	if (evt.getPropertyName().equals("pieceFormation")) {
 	    board.setPieceFormation((Piece[][])evt.getNewValue());
+	}
+	if (evt.getPropertyName().equals("running")
+		&& (boolean)evt.getNewValue() == false) {
+
+	    JOptionPane.showMessageDialog(this, "Game End"); // temporär
+
+	    // TODO Hier soll das Spielergebnis angezeigt werden
+	    // Punktzahl und Gewinner sollten vom Model mit einem angepassten
+	    // PropertyChangeEvent losgesendet werden, sodass diese nicht vom
+	    // GUI bestimmt werden, da das GUI die Information ja nur
+	    // visualisieren soll
 	}
     }
 }
