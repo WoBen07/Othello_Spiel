@@ -57,6 +57,12 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	if (evt.getPropertyName().equals("pieceFormation")) {
 	    board.setPieceFormation((Piece[][])evt.getNewValue());
 	}
+	if (evt.getPropertyName().equals("passPlayed")
+		&& (boolean)evt.getNewValue() == true) {
+
+	    JOptionPane.showMessageDialog(this,
+		    "No legal moves, you have to pass");
+	}
 	if (evt.getPropertyName().equals("running")
 		&& (boolean)evt.getNewValue() == false) {
 

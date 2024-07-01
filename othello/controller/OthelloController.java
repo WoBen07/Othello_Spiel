@@ -40,7 +40,7 @@ public class OthelloController {
     public void fieldClicked(int xPosition, int yPosition) {
 	if (model.hasLegalMoves()) {
 	    if (model.getLegalMoves()[xPosition][yPosition]) {
-		updateFieldModel(xPosition, yPosition,
+		model.updatePieceFormation(xPosition, yPosition,
 			(model.isDarksTurn() ? Piece.DARK : Piece.LIGHT));
 		model.flipPieces(xPosition, yPosition);
 		model.setPassPlayed(false);
@@ -49,17 +49,11 @@ public class OthelloController {
 	} else if (model.wasPassPlayed()) {
 	    model.stopGame();
 	} else {
-	    JOptionPane.showMessageDialog(gui,
-		    "No legal moves, you have to pass");
 	    model.setPassPlayed(true);
 	    model.switchTurns();
 	    if (!model.hasLegalMoves()) {
-		JOptionPane.showMessageDialog(gui, "Game End");
+		model.stopGame();
 	    }
 	}
-    }
-
-    public void updateFieldModel(int xPosition, int yPosition, Piece newPiece) {
-	model.updatePieceFormation(xPosition, yPosition, newPiece);
     }
 }

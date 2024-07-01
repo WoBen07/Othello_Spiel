@@ -191,7 +191,7 @@ public class BoardModel implements Serializable {
     }
 
     public boolean hasLegalMoves() {
-	return hasLegalMove;
+	return false;
     }
 
     public boolean wasPassPlayed() {
@@ -199,7 +199,10 @@ public class BoardModel implements Serializable {
     }
 
     public void setPassPlayed(boolean passPlayed) {
+	boolean oldValue = wasPassPlayed();
 	this.passPlayed = passPlayed;
+	
+	firePropertyChange("passPlayed", oldValue, passPlayed);
     }
 
     public boolean isGameOver() {
