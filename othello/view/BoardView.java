@@ -6,86 +6,79 @@ import java.util.Arrays;
 
 import javax.swing.JPanel;
 
-import othello.Occupation;
+import othello.Piece;
 
 @SuppressWarnings("serial")
 public class BoardView extends JPanel {
 
     private OthelloGUI gui;
-    private final FieldView[][] fieldViews = new FieldView[8][8];
-    private Occupation[][] fieldViewOccupations;
+    private final FieldView[][] fields = new FieldView[8][8];
+    private Piece[][] pieceFormation;
 
-    public BoardView(OthelloGUI gui, Occupation[][] fieldViewOccupations) {
-	initFieldViews();
-
+    public BoardView(OthelloGUI gui, Piece[][] pieceFormation) {
+	initFields();
 	setGUI(gui);
-	setFieldViewOccupations(fieldViewOccupations);
+	setPieceFormation(pieceFormation);
 
 	setLayout(new GridLayout(8, 8));
-
-	addFieldViews();
+	addFields();
 
     }
 
-    private static boolean checkFieldViewOccupations(
-	    Occupation[][] fieldViewOccupations) {
-
-	if (fieldViewOccupations.length != 8) {
+    private static boolean checkPieceFormation(Piece[][] pieceFormation) {
+	if (pieceFormation.length != 8) {
 	    return false;
 	}
 	for (int i = 0; i < 8; ++i) {
-	    if (fieldViewOccupations[i].length != 8) {
+	    if (pieceFormation[i].length != 8) {
 		return false;
 	    }
 	}
 	return true;
     }
 
-    public OthelloGUI getGUI() {
-	return gui;
-    }
-
     public void setGUI(OthelloGUI gui) {
 	this.gui = gui;
     }
 
-    public FieldView[][] getFieldViews() {
-	return fieldViews;
-    }
-
-    private void initFieldViews() {
+    private void initFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fieldViews[i][j] = new FieldView(this, i, j, Occupation.NONE);
+		fields[i][j] = new FieldView(this, i, j, Piece.NONE);
 	    }
 	}
     }
 
-    private void updateFieldViews() {
+    private void updateFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		getFieldViews()[i][j]
-			.setOccupation(getFieldViewOccupations()[i][j]);
+		fields[i][j].setPiece(getPieceFormation()[i][j]);
 	    }
 	}
     }
 
-    private void addFieldViews() {
-	Arrays.stream(getFieldViews()).forEach((FieldView[] row) -> {
+    private void addFields() {
+	Arrays.stream(fields).forEach((FieldView[] row) -> {
 	    Arrays.stream(row).forEach(field -> add(field));
 	});
     }
 
-    public Occupation[][] getFieldViewOccupations() {
-	return fieldViewOccupations;
+    public Piece[][] getPieceFormation() {
+	return Arrays.copyOf(pieceFormation, pieceFormation.length);
     }
 
-    public void setFieldViewOccupations(Occupation[][] fieldViewOccupations) {
-	if (checkFieldViewOccupations(fieldViewOccupations)) {
-	    this.fieldViewOccupations = fieldViewOccupations;
-	    updateFieldViews();
+    public void setPieceFormation(Piece[][] pieceFormation) {
+	if (checkPieceFormation(pieceFormation)) {
+	    this.pieceFormation = pieceFormation;
+
+	    updateFields();
 	} else {
-	    throw new IllegalArgumentException("64 occupation-details needed");
+	    throw new IllegalArgumentException(
+		    "pieceFormation does not include 8x8 pieces");
 	}
+    }
+
+    public void fieldClicked(int xPosition, int yPosition) {
+	gui.fieldClicked(xPosition, yPosition);
     }
 }

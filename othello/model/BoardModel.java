@@ -1,53 +1,66 @@
 package othello.model;
 
-import othello.Occupation;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 
-public class BoardModel {
+import java.util.Arrays;
+
+import othello.Piece;
+
+@SuppressWarnings("serial")
+public class BoardModel implements Serializable {
+
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     private final FieldModel[][] fields = new FieldModel[8][8];
-    private Occupation[][] fieldOccupations;
+    private Piece[][] pieceFormation;
     private boolean darksTurn = true;
-    private boolean passPlayed = false;
     private boolean[][] legalMoves;
-    private boolean legalMoveExists = false;
+    private boolean hasLegalMove = false;
+    private boolean passPlayed = false;
+    private boolean running = true;
 
-    public BoardModel(Occupation[][] fieldOccupations) {
+    public BoardModel() {
 	initFields();
-
-	setFieldOccupations(fieldOccupations);
-	updateLegalMoves();
+	setPieceFormation(Piece.startFormation());
     }
 
-    public boolean[][] getLegalMoves() {
-	return legalMoves;
+    public BoardModel(Piece[][] pieceFormation) {
+	initFields();
+	setPieceFormation(pieceFormation);
     }
 
-    public boolean getLegalMoveExists() {
-	return legalMoveExists;
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+	changes.addPropertyChangeListener(l);
     }
 
-    private static boolean checkFieldOccupations(
-	    Occupation[][] fieldOccupations) {
+    public void removePropertyChangeListener(PropertyChangeListener l) {
+	changes.removePropertyChangeListener(l);
+    }
 
-	if (fieldOccupations.length != 8) {
+    public void firePropertyChange(String propertyName, Object oldValue,
+	    Object newValue) {
+
+	changes.firePropertyChange(propertyName, oldValue, newValue);
+    }
+
+    private static boolean checkPieceFormation(Piece[][] pieceFormation) {
+	if (pieceFormation.length != 8) {
 	    return false;
 	}
 	for (int i = 0; i < 8; ++i) {
-	    if (fieldOccupations[i].length != 8) {
+	    if (pieceFormation[i].length != 8) {
 		return false;
 	    }
 	}
 	return true;
     }
 
-    public FieldModel[][] getFields() {
-	return fields;
-    }
-
     private void initFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		fields[i][j] = new FieldModel(Occupation.NONE);
+		fields[i][j] = new FieldModel(Piece.NONE);
 	    }
 	}
     }
@@ -55,29 +68,36 @@ public class BoardModel {
     private void updateFields() {
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		getFields()[i][j].setOccupation(getFieldOccupations()[i][j]);
+		fields[i][j].setPiece(getPieceFormation()[i][j]);
 	    }
 	}
     }
 
-    public Occupation[][] getFieldOccupations() {
-	return fieldOccupations;
+    public Piece[][] getPieceFormation() {
+	return Arrays.copyOf(pieceFormation, pieceFormation.length);
     }
 
-    public void setFieldOccupations(Occupation[][] fieldOccupations) {
-	if (checkFieldOccupations(fieldOccupations)) {
-	    this.fieldOccupations = fieldOccupations;
+    public void setPieceFormation(Piece[][] pieceFormation) {
+	if (checkPieceFormation(pieceFormation)) {
+	    this.pieceFormation = pieceFormation;
+
 	    updateFields();
+	    updateLegalMoves();
+	    firePropertyChange("pieceFormation", null, pieceFormation);
 	} else {
 	    throw new IllegalArgumentException(
-		    "fieldOccupations does not contain 8x8 occupation-details");
+		    "pieceFormation does not include 8x8 pieces");
 	}
     }
 
-    public void updateFieldOccupation(int xPosition, int yPosition,
-	    Occupation occupation) {
-	getFieldOccupations()[xPosition][yPosition] = occupation;
+    public void updatePieceFormation(int xPosition, int yPosition,
+	    Piece newPiece) {
+
+	pieceFormation[xPosition][yPosition] = newPiece;
+
 	updateFields();
+	updateLegalMoves();
+	firePropertyChange("pieceFormation", null, getPieceFormation());
     }
 
     public boolean isDarksTurn() {
@@ -90,6 +110,88 @@ public class BoardModel {
 	} else {
 	    darksTurn = true;
 	}
+
+	updateLegalMoves();
+    }
+
+    private boolean checkMove(int xNewPiece, int yNewPiece,
+	    boolean flipPieces) {
+
+	int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 },
+		{ -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 } };
+
+	for (int[] direction : directions) {
+	    if (xNewPiece + direction[0] >= 0 && xNewPiece + direction[0] < 8
+		    && yNewPiece + direction[1] >= 0
+		    && yNewPiece + direction[1] < 8) {
+
+		int x = xNewPiece + direction[0];
+		int y = yNewPiece + direction[1];
+
+		if (getPieceFormation()[x][y]
+			.equals(isDarksTurn() ? Piece.LIGHT : Piece.DARK)) {
+
+		    while (x >= 0 && x < 8 && y >= 0 && y < 8) {
+			if (getPieceFormation()[x][y].equals(Piece.NONE)) {
+			    break;
+			}
+			if (getPieceFormation()[x][y]
+				.equals(darksTurn ? Piece.DARK : Piece.LIGHT)) {
+
+			    if (flipPieces) {
+				int flipX = xNewPiece + direction[0];
+				int flipY = yNewPiece + direction[1];
+
+				while (!(flipX == x && flipY == y)) {
+				    updatePieceFormation(flipX, flipY,
+					    darksTurn ? Piece.DARK
+						    : Piece.LIGHT);
+				    flipX += direction[0];
+				    flipY += direction[1];
+				}
+			    } else {
+				return true;
+			    }
+			    break;
+			}
+			x += direction[0];
+			y += direction[1];
+		    }
+		}
+	    }
+	}
+	return false;
+    }
+
+    private boolean isLegalMove(int x, int y) {
+	if (getPieceFormation()[x][y].equals(Piece.NONE)) {
+	    return checkMove(x, y, false);
+	}
+	return false;
+    }
+
+    public boolean[][] getLegalMoves() {
+	return Arrays.copyOf(legalMoves, legalMoves.length);
+    }
+
+    private void updateLegalMoves() {
+	hasLegalMove = false;
+
+	boolean[][] tempLegalMoves = new boolean[8][8];
+
+	for (int i = 0; i < 8; i++) {
+	    for (int j = 0; j < 8; j++) {
+		tempLegalMoves[i][j] = (isLegalMove(i, j));
+		if (tempLegalMoves[i][j]) {
+		    hasLegalMove = true;
+		}
+	    }
+	}
+	this.legalMoves = tempLegalMoves;
+    }
+
+    public boolean hasLegalMove() {
+	return hasLegalMove;
     }
 
     public boolean wasPassPlayed() {
@@ -97,123 +199,23 @@ public class BoardModel {
     }
 
     public void setPassPlayed(boolean passPlayed) {
+	boolean oldValue = wasPassPlayed();
 	this.passPlayed = passPlayed;
+	
+	firePropertyChange("passPlayed", oldValue, passPlayed);
     }
 
-    // sollte moeglichst nur einmal pro zug ausgefuert werden und dann in einer
-    // variable gespeichert werden
-    public void updateLegalMoves() {
-	boolean[][] tempLegalMoves = new boolean[8][8];
-	for (int i = 0; i < 8; i++) {
-	    for (int j = 0; j < 8; j++) {
-		tempLegalMoves[i][j] = (isLegalMove(i, j));
-		if (tempLegalMoves[i][j]) {
-		    legalMoveExists = true;
-		}
-	    }
-	}
-	this.legalMoves = tempLegalMoves;
+    public boolean isGameOver() {
+	return !running;
     }
 
-    private boolean isLegalMove(int x, int y) {
-	if (getFieldOccupations()[x][y] == Occupation.NONE) {
-	    return checkMove(x, y, false);
-	}
-	return false;
+    public void stopGame() {
+	running = false;
+
+	firePropertyChange("running", true, false);
     }
 
-    public void flipOccupations(int xNewPiece, int yNewPiece) {
+    public void flipPieces(int xNewPiece, int yNewPiece) {
 	checkMove(xNewPiece, yNewPiece, true);
-    }
-
-    private boolean checkMove(int xNewPiece, int yNewPiece,
-	    boolean flipOccupations) {
-
-	boolean atLeastOnePieceFlipped = false;
-
-	int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, // vertikal
-									 // und
-									 // horizontal
-		{ -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 } // diagonal
-	};
-
-	// geht durch alle mglichen richtungen durch und checkt falls etwas
-	// umgedreht werden muss
-	for (int[] direction : directions) {
-	    if (xNewPiece + direction[0] >= 0 && xNewPiece + direction[0] < 8
-		    && yNewPiece + direction[1] >= 0
-		    && yNewPiece + direction[1] < 8) {
-
-		boolean opponentPieceFound = false; // true fals min. ein Stein
-						    // des
-						    // Gegners in die jeweilige
-						    // Richtung gefunden wird
-						    // (ohne
-						    // Leere felder dazwischen)
-		int x = xNewPiece + direction[0];
-		int y = yNewPiece + direction[1];
-
-		// OpponentPieceFound muss nur einmal true gesetzt werden, wenn
-		// min. ein generischer Stein in die Richtung gefunden wird,
-		// um anschliesend wenn ein eigener Stein gefunden wird, zu
-		// bestaetigen dass auch min.
-		// ein gegnerischer Stein dazwischen liegt
-		if (getFieldOccupations()[x][y] == (isDarksTurn()
-			? Occupation.LIGHT
-			: Occupation.DARK)) {
-		    opponentPieceFound = true;
-
-		    // wenn der neue Platz einen eigenen Stein hat und min. ein
-		    // gegnerischer Stein dazwischen liegt,
-		    // dann drehe alle diese gegnerischen Steine um
-		}
-
-		// geht in die jeweilige Richtung bis ein eigener Stein gefunden
-		// wird
-		if (opponentPieceFound) {
-		    while (x >= 0 && x < 8 && y >= 0 && y < 8) { // damit nicht
-								 // außerhalb
-								 // des
-								 // Spielfeldes
-								 // gecheckt
-								 // wird
-
-			if (getFieldOccupations()[x][y] == Occupation.NONE) {
-			    break;
-			}
-			if (getFieldOccupations()[x][y] == (darksTurn
-				? Occupation.DARK
-				: Occupation.LIGHT)) {
-
-			    int flipX = xNewPiece + direction[0];
-			    int flipY = yNewPiece + direction[1];
-
-			    // flip sollange die Steine bis die Koordinaten des
-			    // eigenen
-			    // Steines erreicht werden
-			    if (flipOccupations) {
-				while (flipX != x || flipY != y) {
-				    updateFieldOccupation(flipX, flipY,
-					    darksTurn ? Occupation.DARK
-						    : Occupation.LIGHT);
-				    flipX += direction[0];
-				    flipY += direction[1];
-				}
-			    }
-			    atLeastOnePieceFlipped = true;
-			    break;
-			}
-
-			// geht in die jeweilige richtung weiter
-			x += direction[0];
-			y += direction[1];
-		    }
-		}
-	    }
-
-	}
-
-	return atLeastOnePieceFlipped;
-
     }
 }
