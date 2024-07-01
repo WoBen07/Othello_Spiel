@@ -1,7 +1,11 @@
 package othello.view;
 
+import java.awt.Component;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -12,6 +16,7 @@ import othello.controller.OthelloController;
 public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
     private OthelloController controller;
+    private ArrayList<Component> components = new ArrayList<>();
     private BoardView board;
 
     public OthelloGUI(OthelloController controller) {
@@ -24,22 +29,20 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	setVisible(true);
     }
 
-    public OthelloGUI(OthelloController controller, BoardView board) {
-	this(controller);
-	setBoard(board);
-    }
-
     public void setController(OthelloController controller) {
 	this.controller = controller;
     }
 
     public void setBoard(BoardView board) {
-	if (board != null) {
-	    remove(this.board);
-	}
-
 	this.board = board;
+    }
+
+    public void showBoard() {
+	components.forEach(c -> remove(c));
+
 	add(board);
+	components.add(board);
+
 	pack();
     }
 

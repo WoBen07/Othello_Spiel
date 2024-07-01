@@ -33,6 +33,8 @@ public class OthelloController {
 	setGUI(new OthelloGUI(this));
 	gui.setBoard(new BoardView(gui, model.getPieceFormation()));
 	model.addPropertyChangeListener(gui);
+
+	gui.showBoard();
     }
 
     public void fieldClicked(int xPosition, int yPosition) {
