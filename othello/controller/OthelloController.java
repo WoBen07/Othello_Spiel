@@ -1,7 +1,5 @@
 package othello.controller;
 
-import javax.swing.JOptionPane;
-
 import othello.Piece;
 import othello.model.BoardModel;
 import othello.view.BoardView;
@@ -38,7 +36,7 @@ public class OthelloController {
     }
 
     public void fieldClicked(int xPosition, int yPosition) {
-	if (model.hasLegalMoves()) {
+	if (model.hasLegalMove()) {
 	    if (model.getLegalMoves()[xPosition][yPosition]) {
 		model.updatePieceFormation(xPosition, yPosition,
 			(model.isDarksTurn() ? Piece.DARK : Piece.LIGHT));
@@ -51,7 +49,7 @@ public class OthelloController {
 	} else {
 	    model.setPassPlayed(true);
 	    model.switchTurns();
-	    if (!model.hasLegalMoves()) {
+	    if (!model.hasLegalMove()) {
 		model.stopGame();
 	    }
 	}

@@ -190,8 +190,8 @@ public class BoardModel implements Serializable {
 	this.legalMoves = tempLegalMoves;
     }
 
-    public boolean hasLegalMoves() {
-	return false;
+    public boolean hasLegalMove() {
+	return hasLegalMove;
     }
 
     public boolean wasPassPlayed() {
