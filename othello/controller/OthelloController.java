@@ -17,16 +17,8 @@ public class OthelloController {
 	initView();
     }
 
-    public OthelloGUI getGUI() {
-	return gui;
-    }
-
     public void setGUI(OthelloGUI gui) {
 	this.gui = gui;
-    }
-
-    public BoardModel getModel() {
-	return model;
     }
 
     public void setModel(BoardModel model) {
@@ -39,33 +31,31 @@ public class OthelloController {
 
     public void initView() {
 	setGUI(new OthelloGUI(this));
-	getGUI().setBoard(
-		new BoardView(getGUI(), getModel().getPieceFormation()));
-	getGUI().pack();
+	gui.setBoard(new BoardView(gui, model.getPieceFormation()));
+	model.addPropertyChangeListener(gui);
     }
 
     public void fieldClicked(int xPosition, int yPosition) {
-	// Wenn es einen legalen Zug gibt
-	if (getModel().hasLegalMoves()) {
-	    // Wenn der ausgewählte Zug legal ist
-	    if (getModel().getLegalMoves()[xPosition][yPosition]) {
+	if (model.hasLegalMoves()) {
+	    if (model.getLegalMoves()[xPosition][yPosition]) {
 		updateFieldModel(xPosition, yPosition,
-			(getModel().isDarksTurn() ? Piece.DARK : Piece.LIGHT));
-		getModel().flipPieces(xPosition, yPosition);
-		getModel().setPassPlayed(false);
-		getModel().switchTurns();
+			(model.isDarksTurn() ? Piece.DARK : Piece.LIGHT));
+		model.flipPieces(xPosition, yPosition);
+		model.setPassPlayed(false);
+		model.switchTurns();
 	    }
 	} else {
-	    if (getModel().wasPassPlayed()) {
-		JOptionPane.showMessageDialog(getGUI(), "Game End");
+	    if (model.wasPassPlayed()) {
+		JOptionPane.showMessageDialog(gui, "Game End"); // TODO mit
+								// stopGame()
+								// vom Model
 	    } else {
-		JOptionPane.showMessageDialog(getGUI(),
-			"No legal moves, you have to pass", null,
-			JOptionPane.INFORMATION_MESSAGE);
-		getModel().setPassPlayed(true);
-		getModel().switchTurns();
-		if (!getModel().hasLegalMoves()) {
-		    JOptionPane.showMessageDialog(getGUI(), "Game End");
+		JOptionPane.showMessageDialog(gui,
+			"No legal moves, you have to pass");
+		model.setPassPlayed(true);
+		model.switchTurns();
+		if (!model.hasLegalMoves()) {
+		    JOptionPane.showMessageDialog(gui, "Game End");
 		}
 	    }
 	}
@@ -73,7 +63,6 @@ public class OthelloController {
     }
 
     public void updateFieldModel(int xPosition, int yPosition, Piece newPiece) {
-
-	getModel().updatePieceFormation(xPosition, yPosition, newPiece);
+	model.updatePieceFormation(xPosition, yPosition, newPiece);
     }
 }

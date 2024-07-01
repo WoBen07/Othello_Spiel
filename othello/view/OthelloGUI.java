@@ -18,7 +18,6 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	super("Othello");
 
 	setController(controller);
-	controller.getModel().addPropertyChangeListener(this);
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 	pack();
