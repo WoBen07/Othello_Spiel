@@ -30,16 +30,8 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	setBoard(board);
     }
 
-    public OthelloController getController() {
-	return controller;
-    }
-
     public void setController(OthelloController controller) {
 	this.controller = controller;
-    }
-
-    public BoardView getBoard() {
-	return board;
     }
 
     public void setBoard(BoardView board) {
@@ -52,7 +44,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-	if (evt.getPropertyName().equalsIgnoreCase("pieceFormation")) {
+	if (evt.getPropertyName().equals("pieceFormation")) {
 	    board.setPieceFormation((Piece[][])evt.getNewValue());
 	}
     }
