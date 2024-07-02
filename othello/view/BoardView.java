@@ -22,7 +22,6 @@ public class BoardView extends JPanel {
 
 	setLayout(new GridLayout(8, 8));
 	addFields();
-
     }
 
     private static boolean checkPieceFormation(Piece[][] pieceFormation) {

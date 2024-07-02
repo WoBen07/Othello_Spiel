@@ -2,6 +2,7 @@ package othello.controller;
 
 import othello.Piece;
 import othello.model.BoardModel;
+import othello.view.BoardView;
 import othello.view.OthelloGUI;
 
 public class OthelloController {
@@ -19,15 +20,17 @@ public class OthelloController {
 
     public void setModel(BoardModel model) {
 	this.model = model;
+	gui.setBoard(new BoardView(gui, model.getPieceFormation()));
+	model.addPropertyChangeListener(gui);
     }
 
     public void initView() {
 	setGUI(new OthelloGUI(this));
     }
 
-    public void initModel() {
-	setModel(new BoardModel(Piece.startFormation()));
-	model.addPropertyChangeListener(gui);
+    public void newGameClicked() {
+	setModel(new BoardModel());
+	gui.showBoard();
     }
 
     public void fieldClicked(int xPosition, int yPosition) {

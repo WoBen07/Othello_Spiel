@@ -1,5 +1,6 @@
 package othello.view;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 
 import java.beans.PropertyChangeEvent;
@@ -7,6 +8,7 @@ import java.beans.PropertyChangeListener;
 
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -24,7 +26,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	super("Othello");
 
 	setController(controller);
-	
+
 	showHome();
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -39,25 +41,31 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     public void setBoard(BoardView board) {
 	this.board = board;
     }
-    
+
     private void clearFrame() {
 	components.forEach(c -> remove(c));
 	components.clear();
     }
-    
+
     public void showHome() {
 	clearFrame();
-	
-	setSize()
+
+	JButton newButton = new JButton("New Game");
+	newButton.addActionListener(e -> controller.newGameClicked());
+
+	add(newButton);
+	components.add(newButton);
+
+	setVisible(true);
     }
 
     public void showBoard() {
 	clearFrame();
 
-	add(board);
+	add(board, BorderLayout.CENTER);
 	components.add(board);
 
-	pack();
+	setVisible(true);
     }
 
     public void fieldClicked(int xPosition, int yPosition) {
