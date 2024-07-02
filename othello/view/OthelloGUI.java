@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import othello.Piece;
 import othello.controller.OthelloController;
@@ -28,7 +30,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
 	setController(controller);
 
-	showHome();
+	showTitleScreen();
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 	setSize(1000, 1000);
@@ -48,8 +50,12 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	components.clear();
     }
 
-    public void showHome() {
+    public void showTitleScreen() {
 	clearFrame();
+
+	JLabel title = new JLabel("Othello", SwingConstants.CENTER);
+	add(title, BorderLayout.NORTH);
+	components.add(title);
 
 	JPanel panel = new JPanel();
 
@@ -65,7 +71,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 		e -> controller.loadGame(e.getActionCommand()));
 	panel.add(loadBox);
 
-	add(panel);
+	add(panel, BorderLayout.CENTER);
 	components.add(panel);
 
 	setVisible(true);
