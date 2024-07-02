@@ -24,9 +24,11 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	super("Othello");
 
 	setController(controller);
+	
+	showHome();
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
-	pack();
+	setSize(1280, 720);
 	setVisible(true);
     }
 
@@ -37,10 +39,20 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     public void setBoard(BoardView board) {
 	this.board = board;
     }
-
-    public void showBoard() {
+    
+    private void clearFrame() {
 	components.forEach(c -> remove(c));
 	components.clear();
+    }
+    
+    public void showHome() {
+	clearFrame();
+	
+	setSize()
+    }
+
+    public void showBoard() {
+	clearFrame();
 
 	add(board);
 	components.add(board);
