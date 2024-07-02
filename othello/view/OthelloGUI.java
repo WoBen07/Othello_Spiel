@@ -1,8 +1,6 @@
 package othello.view;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -75,7 +73,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     public void showBoard() {
 	clearFrame();
 
-	add(board, BorderLayout.CENTER);
+	add(board);
 	components.add(board);
 
 	setVisible(true);
