@@ -46,6 +46,9 @@ public class FieldView extends JButton {
     public static void setColor(Color color) {
 	if (checkColor(color)) {
 	    FieldView.color = color;
+	} else {
+	    throw new IllegalArgumentException(
+		    "color too bright, too dark or too transparent");
 	}
     }
 
