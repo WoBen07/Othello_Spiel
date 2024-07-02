@@ -26,9 +26,13 @@ public class BoardModel implements Serializable {
 	setPieceFormation(Piece.startFormation());
     }
 
-    public BoardModel(Piece[][] pieceFormation) {
+    public BoardModel(Piece[][] pieceFormation, boolean darksTurn,
+	    boolean passPlayed, boolean running) {
 	initFields();
 	setPieceFormation(pieceFormation);
+	this.darksTurn = darksTurn;
+	setPassPlayed(passPlayed);
+	this.running = running;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener l) {
@@ -37,12 +41,6 @@ public class BoardModel implements Serializable {
 
     public void removePropertyChangeListener(PropertyChangeListener l) {
 	changes.removePropertyChangeListener(l);
-    }
-
-    public void firePropertyChange(String propertyName, Object oldValue,
-	    Object newValue) {
-
-	changes.firePropertyChange(propertyName, oldValue, newValue);
     }
 
     private static boolean checkPieceFormation(Piece[][] pieceFormation) {
@@ -83,7 +81,7 @@ public class BoardModel implements Serializable {
 
 	    updateFields();
 	    updateLegalMoves();
-	    firePropertyChange("pieceFormation", null, pieceFormation);
+	    changes.firePropertyChange("pieceFormation", null, pieceFormation);
 	} else {
 	    throw new IllegalArgumentException(
 		    "pieceFormation does not include 8x8 pieces");
@@ -97,7 +95,7 @@ public class BoardModel implements Serializable {
 
 	updateFields();
 	updateLegalMoves();
-	firePropertyChange("pieceFormation", null, getPieceFormation());
+	changes.firePropertyChange("pieceFormation", null, getPieceFormation());
     }
 
     public boolean isDarksTurn() {
@@ -201,8 +199,8 @@ public class BoardModel implements Serializable {
     public void setPassPlayed(boolean passPlayed) {
 	boolean oldValue = wasPassPlayed();
 	this.passPlayed = passPlayed;
-	
-	firePropertyChange("passPlayed", oldValue, passPlayed);
+
+	changes.firePropertyChange("passPlayed", oldValue, passPlayed);
     }
 
     public boolean isGameOver() {
@@ -212,7 +210,7 @@ public class BoardModel implements Serializable {
     public void stopGame() {
 	running = false;
 
-	firePropertyChange("running", true, false);
+	changes.firePropertyChange("running", true, false);
     }
 
     public void flipPieces(int xNewPiece, int yNewPiece) {

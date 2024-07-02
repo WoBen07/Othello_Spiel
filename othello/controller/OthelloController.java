@@ -28,9 +28,14 @@ public class OthelloController {
 	setGUI(new OthelloGUI(this));
     }
 
-    public void newGameClicked() {
+    public void newGame() {
 	setModel(new BoardModel());
 	gui.showBoard();
+    }
+
+    public void loadGame(String name) {
+	setModel(new BoardModel()); // TODO Konstruktor mit Attributen des zu
+				    // ladenden Spiels aufrufen
     }
 
     public void fieldClicked(int xPosition, int yPosition) {
