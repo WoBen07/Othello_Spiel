@@ -7,11 +7,20 @@ import othello.view.OthelloGUI;
 
 public class OthelloController {
 
+    private static OthelloController unique;
+
     private OthelloGUI gui;
     private BoardModel model;
 
-    public OthelloController() {
+    private OthelloController() {
 	initView();
+    }
+
+    public static OthelloController instance() {
+	if (unique == null) {
+	    unique = new OthelloController();
+	}
+	return unique;
     }
 
     public void setGUI(OthelloGUI gui) {
