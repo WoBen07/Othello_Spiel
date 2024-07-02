@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import othello.Piece;
 import othello.controller.OthelloController;
@@ -51,17 +52,22 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     public void showHome() {
 	clearFrame();
 
+	JPanel panel = new JPanel();
+
 	JButton newButton = new JButton("New Game");
 	newButton.addActionListener(e -> controller.newGame());
-	add(newButton);
-	components.add(newButton);
+	panel.add(newButton);
 
-	JComboBox<String> loadGame = new JComboBox<>(); // TODO Konstruktor die
-							// Namen der saved games
-							// übergeben
-	loadGame.setEditable(false);
-	loadGame.addActionListener(
+	JComboBox<String> loadBox = new JComboBox<>(); // TODO Konstruktor die
+						       // Namen der saved games
+						       // übergeben
+	loadBox.setEditable(false);
+	loadBox.addActionListener(
 		e -> controller.loadGame(e.getActionCommand()));
+	panel.add(loadBox);
+
+	add(panel);
+	components.add(panel);
 
 	setVisible(true);
     }
