@@ -114,7 +114,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	components.add(board);
 
 	JButton homeButton = new JButton("Back to Home");
-	homeButton.addActionListener(e -> controller.backHome());
+	homeButton.addActionListener(e -> showHome());
 	add(homeButton, BorderLayout.SOUTH);
 	components.add(homeButton);
 

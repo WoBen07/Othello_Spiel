@@ -47,10 +47,6 @@ public class OthelloController {
 				    // ladenden Spiels aufrufen
     }
 
-    public void backHome() {
-	gui.showHome();
-    }
-
     public void fieldClicked(int xPosition, int yPosition) {
 	if (model.hasLegalMove()) {
 	    if (model.getLegalMoves()[xPosition][yPosition]) {
