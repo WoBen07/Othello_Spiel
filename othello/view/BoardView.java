@@ -1,10 +1,12 @@
 package othello.view;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 
 import java.util.Arrays;
 
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import othello.Piece;
 
@@ -22,7 +24,7 @@ public class BoardView extends JPanel {
 
 	setLayout(new GridLayout(8, 8));
 	addFields();
-
+	setBorder(new LineBorder(new Color(139, 69, 19), 50));
     }
 
     private static boolean checkPieceFormation(Piece[][] pieceFormation) {

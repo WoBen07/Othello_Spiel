@@ -7,12 +7,20 @@ import othello.view.OthelloGUI;
 
 public class OthelloController {
 
+    private static OthelloController unique;
+
     private OthelloGUI gui;
     private BoardModel model;
 
-    public OthelloController() {
-	initModel();
+    private OthelloController() {
 	initView();
+    }
+
+    public static OthelloController instance() {
+	if (unique == null) {
+	    unique = new OthelloController();
+	}
+	return unique;
     }
 
     public void setGUI(OthelloGUI gui) {
@@ -21,18 +29,22 @@ public class OthelloController {
 
     public void setModel(BoardModel model) {
 	this.model = model;
-    }
-
-    public void initModel() {
-	setModel(new BoardModel(Piece.startFormation()));
+	gui.setBoard(new BoardView(gui, model.getPieceFormation()));
+	model.addPropertyChangeListener(gui);
     }
 
     public void initView() {
 	setGUI(new OthelloGUI(this));
-	gui.setBoard(new BoardView(gui, model.getPieceFormation()));
-	model.addPropertyChangeListener(gui);
+    }
 
+    public void newGame() {
+	setModel(new BoardModel());
 	gui.showBoard();
+    }
+
+    public void loadGame(String name) {
+	setModel(new BoardModel()); // TODO Konstruktor mit Attributen des zu
+				    // ladenden Spiels aufrufen
     }
 
     public void fieldClicked(int xPosition, int yPosition) {
