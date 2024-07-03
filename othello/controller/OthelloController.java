@@ -17,12 +17,10 @@ public class OthelloController {
     }
 
     public static OthelloController instance() {
-		if (unique == null) {
-			unique = new OthelloController();
-		} else {
-			unique.backHome();
-		}
-        return null;
+	if (unique == null) {
+	    unique = new OthelloController();
+	}
+	return unique;
     }
 
     public void setGUI(OthelloGUI gui) {
@@ -40,8 +38,8 @@ public class OthelloController {
     }
 
     public void newGame() {
-		setModel(new BoardModel());
-		gui.showBoard();
+	setModel(new BoardModel());
+	gui.showBoard();
     }
 
     public void loadGame(String name) {
