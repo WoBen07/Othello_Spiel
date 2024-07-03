@@ -74,8 +74,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 		if (choice == JOptionPane.YES_OPTION) {
 			System.exit(0);
 		} else if (choice == JOptionPane.NO_OPTION) {
-			int width = getWidth();
-			int height = getHeight();
+
 
 			dispose();
 
