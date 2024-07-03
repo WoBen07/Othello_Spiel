@@ -24,7 +24,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
 	setController(controller);
 
-	showHome();
+	showTitleScreen();
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 	setSize(1280, 720);
@@ -44,7 +44,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	components.clear();
     }
 
-    public void showHome() {
+    public void showTitleScreen() {
 	clearFrame();
 
 	JPanel panel = new JPanel(new GridBagLayout());
@@ -113,10 +113,10 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	add(board, BorderLayout.CENTER);
 	components.add(board);
 
-	JButton homeButton = new JButton("Back to Home");
-	homeButton.addActionListener(e -> showHome());
-	add(homeButton, BorderLayout.SOUTH);
-	components.add(homeButton);
+	JButton backToTitleButton = new JButton("Save and Quit to Title");
+	backToTitleButton.addActionListener(e -> showTitleScreen());
+	add(backToTitleButton, BorderLayout.SOUTH);
+	components.add(backToTitleButton);
 
 	setVisible(true);
     }
@@ -126,33 +126,43 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     }
 
     public void showGameResult() {
-	int darkScore = 0;
-	int lightScore = 0;
+	int darkPieces = 0;
+	int lightPieces = 0;
+	int emptyFields = 0;
 
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
 		if (board.getPieceFormation()[i][j].equals(Piece.DARK)) {
-		    darkScore++;
+		    ++darkPieces;
 		} else if (board.getPieceFormation()[i][j]
 			.equals(Piece.LIGHT)) {
-		    lightScore++;
+		    ++lightPieces;
+		} else {
+		    ++emptyFields;
 		}
 	    }
 	}
 
-	String message = "Game Over!\n" + "Dark: " + darkScore + "\n"
-		+ "Light: " + lightScore + "\n" + "Winner: "
-		+ (darkScore > lightScore ? "Dark" : "Light");
+	int score = Math.abs(darkPieces - lightPieces) + emptyFields;
 
-	String[] options = { "Close Game", "Back to Home" };
-	int choice = JOptionPane.showOptionDialog(this, message, "Game Over",
-		JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+	String message = new String();
+	if (darkPieces != lightPieces) {
+	    message = (darkPieces > lightPieces ? "Dark wins!\n"
+		    : "Light wins!\n") + "Score: " + score;
+	} else {
+	    message = "Tie!\n";
+	}
+
+	String[] options = { "Save Game", "Quit without Saving" };
+
+	int choice = JOptionPane.showOptionDialog(this, message, "Game Over!",
+		JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
 		null, options, options[0]);
 
-	if (choice == JOptionPane.YES_OPTION) {
-	    System.exit(0);
-	} else if (choice == JOptionPane.NO_OPTION) {
-	    showHome();
+	if (choice == 0) {
+	    showTitleScreen(); // TODO Spiel speichern
+	} else if (choice == 1) {
+	    showTitleScreen();
 	}
     }
 
