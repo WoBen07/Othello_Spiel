@@ -27,7 +27,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         showHome();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(720, 720);
+        setSize(1280, 720);
         setVisible(true);
     }
 
@@ -88,7 +88,6 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         add(panel, BorderLayout.CENTER);
         components.add(panel);
 
-        setLocationRelativeTo(null);
         setVisible(true);
     }
 
