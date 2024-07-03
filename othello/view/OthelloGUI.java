@@ -78,12 +78,6 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         exitButton.addActionListener(e -> System.exit(0));
         panel.add(exitButton, gbc);
 
-        JCheckBox easyModeCheckBox = new JCheckBox("Easy Mode");
-        easyModeCheckBox.setPreferredSize(new Dimension(200, 40));
-        easyModeCheckBox.addActionListener(e -> changeEasyMode());
-        panel.add(easyModeCheckBox, gbc);
-
-
         add(panel, BorderLayout.CENTER);
         components.add(panel);
 
@@ -91,13 +85,6 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         setVisible(true);
     }
 
-    private void changeEasyMode() {
-        if (this.easyMode) {
-            this.easyMode = false;
-        } else if (!(this.easyMode)) {
-            this.easyMode = true;
-        }
-    }
 
     private void showRules() {
         JOptionPane.showMessageDialog(this,
@@ -131,7 +118,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     }
 
 
-    public void showGameResult(int darkScore, int lightScore) {
+    public void showEndScreen(int darkScore, int lightScore) {
         String message = "Game Over!\n" +
                 "Dark: " + darkScore + "\n" +
                 "Light: " + lightScore + "\n" +
@@ -165,7 +152,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         }
         if (evt.getPropertyName().equals("gameResult")) {
             int[] scores = (int[]) evt.getNewValue();
-            showGameResult(scores[0], scores[1]);
+            showEndScreen(scores[0], scores[1]);
         }
     }
 }

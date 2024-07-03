@@ -40,7 +40,7 @@ public class ProportionalLayout implements LayoutManager {
         int width = parent.getWidth();
         int height = parent.getHeight();
 
-        
+
         int paddingX = Math.round(width * PADDING_PERCENTAGE);
         int paddingY = Math.round(height * PADDING_PERCENTAGE);
 
