@@ -1,7 +1,6 @@
 package othello.view;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -46,43 +45,73 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     }
 
     private void clearFrame() {
-	components.forEach(c -> remove(c));
-	components.clear();
-    }
+		components.forEach(c -> remove(c));
+		components.clear();
+	}
 
-    public void showHome() {
-	clearFrame();
+	public void showHome() {
+		clearFrame();
 
-	JLabel title = new JLabel("Othello", SwingConstants.CENTER);
-	add(title, BorderLayout.NORTH);
-	components.add(title);
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.gridy = GridBagConstraints.RELATIVE;
+		gbc.weightx = 1;
 
-	JPanel centerPanel = new JPanel();
+		JButton newButton = new JButton("New Game");
+		newButton.setPreferredSize(new Dimension(200, 40));
+		newButton.addActionListener(e -> {
+			panel.removeAll();
+			controller.newGame();
+		});
+		panel.add(newButton, gbc);
 
-	JButton newButton = new JButton("New Game");
-	newButton.addActionListener(e -> controller.newGame());
-	centerPanel.add(newButton);
+		JButton loadButton = new JButton("Load Game");
+		loadButton.setPreferredSize(new Dimension(200, 40));
+		// TODO: Add appropriate action listener for loading game
+		panel.add(loadButton, gbc);
 
-	JComboBox<String> loadBox = new JComboBox<>(); // TODO Konstruktor die
-						       // Namen der saved games
-						       // übergeben
-	loadBox.setEditable(false);
-	loadBox.addActionListener(
-		e -> controller.loadGame(e.getActionCommand()));
-	centerPanel.add(loadBox);
+		JButton rulesButton = new JButton("Show Rules");
+		rulesButton.setPreferredSize(new Dimension(200, 40));
+		rulesButton.addActionListener(e -> showRules());
+		panel.add(rulesButton, gbc);
 
-	add(centerPanel, BorderLayout.CENTER);
-	components.add(centerPanel);
+		JButton exitButton = new JButton("Exit");
+		exitButton.setPreferredSize(new Dimension(200, 40));
+		exitButton.addActionListener(e -> System.exit(0));
+		panel.add(exitButton, gbc);
 
-	setVisible(true);
-    }
+		add(panel, BorderLayout.CENTER);
+		components.add(panel);
+
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+
+	private void showRules() {
+		JOptionPane.showMessageDialog(this,
+				"Othello Spielregeln:\n" +
+						"1. Das Spiel wird auf einem 8x8 Brett gespielt.\n" +
+						"2. Die Spieler setzen abwechselnd Steine auf das Brett.\n" +
+						"3. Steine werden durch Einklammern der gegnerischen Steine erobert.\n" +
+						"4. Das Spiel endet, wenn kein Spieler mehr einen gültigen Zug machen kann.\n" +
+						"5. Der Spieler mit den meisten Steinen auf dem Brett gewinnt.",
+				"Spielregeln",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+
+
+
 
     public void showBoard() {
 	clearFrame();
 
 	add(board, BorderLayout.CENTER);
 	components.add(board);
-	
+
 	JButton homeButton = new JButton("Back to Home");
 	homeButton.addActionListener(e -> controller.backHome());
 	add(homeButton, BorderLayout.SOUTH);
@@ -95,27 +124,41 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	controller.fieldClicked(xPosition, yPosition);
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-	if (evt.getPropertyName().equals("pieceFormation")) {
-	    board.setPieceFormation((Piece[][])evt.getNewValue());
-	}
-	if (evt.getPropertyName().equals("passPlayed")
-		&& (boolean)evt.getNewValue() == true) {
 
-	    JOptionPane.showMessageDialog(this,
-		    "No legal moves, you have to pass");
-	}
-	if (evt.getPropertyName().equals("running")
-		&& (boolean)evt.getNewValue() == false) {
+	public void showGameResult(int darkScore, int lightScore) {
+		String message = "Game Over!\n" +
+				"Dark: " + darkScore + "\n" +
+				"Light: " + lightScore + "\n" +
+				"Winner: " + (darkScore > lightScore ? "Dark" : "Light");
 
-	    JOptionPane.showMessageDialog(this, "Game End"); // temporär
+		String[] options = {"Close Game", "Back to Home"};
+		int choice = JOptionPane.showOptionDialog(this,
+				message,
+				"Game Over",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				options,
+				options[0]);
 
-	    // TODO Hier soll das Spielergebnis angezeigt werden
-	    // Punktzahl und Gewinner sollten vom Model mit einem angepassten
-	    // PropertyChangeEvent losgesendet werden, sodass diese nicht vom
-	    // GUI bestimmt werden, da das GUI die Information ja nur
-	    // visualisieren soll
+		if (choice == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		} else if (choice == JOptionPane.NO_OPTION) {
+			OthelloController.instance();
+		}
 	}
-    }
+
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals("pieceFormation")) {
+			board.setPieceFormation((Piece[][]) evt.getNewValue());
+		}
+		if (evt.getPropertyName().equals("passPlayed") && (boolean) evt.getNewValue() == true) {
+			JOptionPane.showMessageDialog(this, "No legal moves, you have to pass");
+		}
+		if (evt.getPropertyName().equals("gameResult")) {int[] scores = (int[]) evt.getNewValue();
+			showGameResult(scores[0], scores[1]);
+		}
+	}
 }

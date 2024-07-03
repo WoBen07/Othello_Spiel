@@ -207,11 +207,27 @@ public class BoardModel implements Serializable {
 	return !running;
     }
 
-    public void stopGame() {
-	running = false;
+	public void stopGame() {
+		running = false;
 
-	changes.firePropertyChange("running", true, false);
-    }
+		changes.firePropertyChange("running", true, false);
+
+		int darkScore = 0;
+		int lightScore = 0;
+
+		for (int i = 0; i < 8; ++i) {
+			for (int j = 0; j < 8; ++j) {
+				if (pieceFormation[i][j] == Piece.DARK) {
+					darkScore++;
+				} else if (pieceFormation[i][j] == Piece.LIGHT) {
+					lightScore++;
+				}
+			}
+		}
+
+		int[] scores = {darkScore, lightScore};
+		changes.firePropertyChange("gameResult", null, scores);
+	}
 
     public void flipPieces(int xNewPiece, int yNewPiece) {
 	checkMove(xNewPiece, yNewPiece, true);
