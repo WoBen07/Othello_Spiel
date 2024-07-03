@@ -75,8 +75,7 @@ public class BoardView extends JPanel {
 
             updateFields();
         } else {
-            throw new IllegalArgumentException(
-                    "pieceFormation does not include 8x8 pieces");
+            throw new IllegalArgumentException("pieceFormation does not include 8x8 pieces");
         }
     }
 

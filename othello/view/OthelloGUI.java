@@ -6,13 +6,7 @@ import java.beans.PropertyChangeListener;
 
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import othello.Piece;
 import othello.controller.OthelloController;
@@ -23,6 +17,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     private OthelloController controller;
     private ArrayList<Component> components = new ArrayList<>();
     private BoardView board;
+    private boolean easyMode;
 
     public OthelloGUI(OthelloController controller) {
         super("Othello");
@@ -83,11 +78,26 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         exitButton.addActionListener(e -> System.exit(0));
         panel.add(exitButton, gbc);
 
+        JCheckBox easyModeCheckBox = new JCheckBox("Easy Mode");
+        easyModeCheckBox.setPreferredSize(new Dimension(200, 40));
+        easyModeCheckBox.addActionListener(e -> changeEasyMode());
+        panel.add(easyModeCheckBox, gbc);
+
+
+
         add(panel, BorderLayout.CENTER);
         components.add(panel);
 
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void changeEasyMode() {
+        if (this.easyMode) {
+            this.easyMode = false;
+        } else if (!(this.easyMode)) {
+            this.easyMode = true;
+        }
     }
 
     private void showRules() {
