@@ -52,6 +52,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	clearFrame();
 
 	JPanel panel = new JPanel(new GridBagLayout());
+
 	GridBagConstraints gbc = new GridBagConstraints();
 	gbc.insets = new Insets(10, 10, 10, 10);
 	gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -85,6 +86,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	setVisible(true);
     }
 
+    // TODO
     private void showRules() {
 	JOptionPane.showMessageDialog(this, "Othello Spielregeln:\n"
 		+ "1. Das Spiel wird auf einem 8x8 Brett gespielt.\n"
