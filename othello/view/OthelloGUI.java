@@ -30,10 +30,10 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
 	setController(controller);
 
-	showTitleScreen();
+	showHome();
 
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
-	setSize(1000, 1000);
+	setSize(720, 720);
 	setVisible(true);
     }
 
@@ -50,18 +50,18 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	components.clear();
     }
 
-    public void showTitleScreen() {
+    public void showHome() {
 	clearFrame();
 
 	JLabel title = new JLabel("Othello", SwingConstants.CENTER);
 	add(title, BorderLayout.NORTH);
 	components.add(title);
 
-	JPanel panel = new JPanel();
+	JPanel centerPanel = new JPanel();
 
 	JButton newButton = new JButton("New Game");
 	newButton.addActionListener(e -> controller.newGame());
-	panel.add(newButton);
+	centerPanel.add(newButton);
 
 	JComboBox<String> loadBox = new JComboBox<>(); // TODO Konstruktor die
 						       // Namen der saved games
@@ -69,10 +69,10 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	loadBox.setEditable(false);
 	loadBox.addActionListener(
 		e -> controller.loadGame(e.getActionCommand()));
-	panel.add(loadBox);
+	centerPanel.add(loadBox);
 
-	add(panel, BorderLayout.CENTER);
-	components.add(panel);
+	add(centerPanel, BorderLayout.CENTER);
+	components.add(centerPanel);
 
 	setVisible(true);
     }
@@ -82,6 +82,11 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
 	add(board, BorderLayout.CENTER);
 	components.add(board);
+	
+	JButton homeButton = new JButton("Back to Home");
+	homeButton.addActionListener(e -> controller.backHome());
+	add(homeButton, BorderLayout.SOUTH);
+	components.add(homeButton);
 
 	setVisible(true);
     }
