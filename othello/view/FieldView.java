@@ -16,62 +16,63 @@ public class FieldView extends JButton {
     private final int yPosition;
     private Piece piece;
 
-    public FieldView(BoardView board, int xPosition, int yPosition, Piece piece) {
+    public FieldView(BoardView board, int xPosition, int yPosition,
+	    Piece piece) {
 
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        setPiece(piece);
+	this.xPosition = xPosition;
+	this.yPosition = yPosition;
+	setPiece(piece);
 
-        setPreferredSize(new Dimension(100, 100));
+	setPreferredSize(new Dimension(100, 100));
 
-        addActionListener(
-                e -> board.fieldClicked(getXPosition(), getYPosition()));
+	addActionListener(
+		e -> board.fieldClicked(getXPosition(), getYPosition()));
     }
 
     private static boolean checkColor(Color color) {
-        int brightness = Math.max(color.getRed(),
-                Math.max(color.getGreen(), color.getBlue())) * color.getAlpha();
+	int brightness = Math.max(color.getRed(),
+		Math.max(color.getGreen(), color.getBlue())) * color.getAlpha();
 
-        if (85 * 255 < brightness && brightness < 190 * 255) {
-            return true;
-        }
-        return false;
+	if (85 * 255 < brightness && brightness < 190 * 255) {
+	    return true;
+	}
+	return false;
     }
 
     public static Color getColor() {
-        return new Color(color.getRGB());
+	return new Color(color.getRGB());
     }
 
     public static void setColor(Color color) {
-        if (checkColor(color)) {
-            FieldView.color = color;
-        } else {
-            throw new IllegalArgumentException(
-                    "color too bright, too dark or too transparent");
-        }
+	if (checkColor(color)) {
+	    FieldView.color = color;
+	} else {
+	    throw new IllegalArgumentException(
+		    "color too bright, too dark or too transparent");
+	}
     }
 
     public int getXPosition() {
-        return xPosition;
+	return xPosition;
     }
 
     public int getYPosition() {
-        return yPosition;
+	return yPosition;
     }
 
     public Piece getPiece() {
-        return piece;
+	return piece;
     }
 
     public void setPiece(Piece piece) {
-        this.piece = piece;
+	this.piece = piece;
 
-        if (piece == Piece.NONE) {
-            setBackground(color);
-        } else if (piece == Piece.DARK) {
-            setBackground(Color.BLACK);
-        } else {
-            setBackground(Color.WHITE);
-        }
+	if (piece == Piece.NONE) {
+	    setBackground(color);
+	} else if (piece == Piece.DARK) {
+	    setBackground(Color.BLACK);
+	} else {
+	    setBackground(Color.WHITE);
+	}
     }
 }
