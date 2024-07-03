@@ -125,7 +125,22 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	controller.fieldClicked(xPosition, yPosition);
     }
 
-    public void showGameResult(int darkScore, int lightScore) {
+    public void showGameResult() {
+	int darkScore = 0;
+	int lightScore = 0;
+
+	for (int i = 0; i < 8; ++i) {
+	    for (int j = 0; j < 8; ++j) {
+		if (board.getPieceFormation()[i][j] == Piece.DARK) {
+		    darkScore++;
+		} else if (board.getPieceFormation()[i][j] == Piece.LIGHT) {
+		    lightScore++;
+		}
+	    }
+	}
+
+	int[] scores = { darkScore, lightScore };
+
 	String message = "Game Over!\n" + "Dark: " + darkScore + "\n"
 		+ "Light: " + lightScore + "\n" + "Winner: "
 		+ (darkScore > lightScore ? "Dark" : "Light");
@@ -152,9 +167,9 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 	    JOptionPane.showMessageDialog(this,
 		    "No legal moves, you have to pass");
 	}
-	if (evt.getPropertyName().equals("gameResult")) {
-	    int[] scores = (int[])evt.getNewValue();
-	    showGameResult(scores[0], scores[1]);
+	if (evt.getPropertyName().equals("running")
+		&& (boolean)evt.getNewValue() == false) {
+	    showGameResult();
 	}
     }
 }
