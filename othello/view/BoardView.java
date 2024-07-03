@@ -1,11 +1,8 @@
 package othello.view;
 
 import java.awt.*;
-
 import java.util.Arrays;
-
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 
 import othello.Piece;
@@ -22,9 +19,9 @@ public class BoardView extends JPanel {
         setGUI(gui);
         setPieceFormation(pieceFormation);
 
-        setLayout(new GridLayout(8, 8));
+        setLayout(new ProportionalLayout());
         addFields();
-        setBorder(new LineBorder(new Color(139, 69, 19), 50));
+        setBorder(new LineBorder(new Color(139, 69, 19), 99999));
     }
 
     private static boolean checkPieceFormation(Piece[][] pieceFormation) {
@@ -60,9 +57,13 @@ public class BoardView extends JPanel {
     }
 
     private void addFields() {
-        Arrays.stream(fields).forEach((FieldView[] row) -> {
-            Arrays.stream(row).forEach(field -> add(field));
-        });
+        ProportionalLayout layout = (ProportionalLayout) getLayout();
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                layout.addLayoutComponent(fields[i][j], i / 8.0f, j / 8.0f, 1 / 8.0f, 1 / 8.0f);
+                add(fields[i][j]);
+            }
+        }
     }
 
     public Piece[][] getPieceFormation() {

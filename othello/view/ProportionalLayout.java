@@ -10,7 +10,7 @@ import java.util.Map;
 public class ProportionalLayout implements LayoutManager {
 
     private Map<Component, Float[]> componentConstraints = new HashMap<>();
-
+    private static final float PADDING_PERCENTAGE = 0.1f; // 10% padding
 
     @Override
     public void addLayoutComponent(String name, Component comp) { }
@@ -40,16 +40,26 @@ public class ProportionalLayout implements LayoutManager {
         int width = parent.getWidth();
         int height = parent.getHeight();
 
+        
+        int paddingX = Math.round(width * PADDING_PERCENTAGE);
+        int paddingY = Math.round(height * PADDING_PERCENTAGE);
+
+        int adjustedWidth = width - 2 * paddingX;
+        int adjustedHeight = height - 2 * paddingY;
+
+        int size = Math.min(adjustedWidth, adjustedHeight);
+
+        int xOffset = paddingX + (adjustedWidth - size) / 2;
+        int yOffset = paddingY + (adjustedHeight - size) / 2;
+
         for (Map.Entry<Component, Float[]> entry : componentConstraints.entrySet()) {
             Component comp = entry.getKey();
             Float[] constraints = entry.getValue();
-            int x = Math.round(constraints[0] * width);
-            int y = Math.round(constraints[1] * height);
-            int w = Math.round(constraints[2] * width);
-            int h = Math.round(constraints[3] * height);
+            int x = xOffset + Math.round(constraints[0] * size);
+            int y = yOffset + Math.round(constraints[1] * size);
+            int w = Math.round(constraints[2] * size);
+            int h = Math.round(constraints[3] * size);
             comp.setBounds(x, y, w, h);
         }
     }
-
-
 }

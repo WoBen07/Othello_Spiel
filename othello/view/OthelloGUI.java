@@ -84,7 +84,6 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         panel.add(easyModeCheckBox, gbc);
 
 
-
         add(panel, BorderLayout.CENTER);
         components.add(panel);
 
@@ -151,7 +150,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         if (choice == JOptionPane.YES_OPTION) {
             System.exit(0);
         } else if (choice == JOptionPane.NO_OPTION) {
-            OthelloController.instance();
+            showHome();
         }
     }
 
