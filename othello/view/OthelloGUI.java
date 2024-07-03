@@ -131,15 +131,14 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
 	for (int i = 0; i < 8; ++i) {
 	    for (int j = 0; j < 8; ++j) {
-		if (board.getPieceFormation()[i][j] == Piece.DARK) {
+		if (board.getPieceFormation()[i][j].equals(Piece.DARK)) {
 		    darkScore++;
-		} else if (board.getPieceFormation()[i][j] == Piece.LIGHT) {
+		} else if (board.getPieceFormation()[i][j]
+			.equals(Piece.LIGHT)) {
 		    lightScore++;
 		}
 	    }
 	}
-
-	int[] scores = { darkScore, lightScore };
 
 	String message = "Game Over!\n" + "Dark: " + darkScore + "\n"
 		+ "Light: " + lightScore + "\n" + "Winner: "
