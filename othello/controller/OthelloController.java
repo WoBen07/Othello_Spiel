@@ -22,7 +22,7 @@ public class OthelloController {
         } else {
             unique.backHome();
         }
-        return null;
+        return unique;
     }
 
     public void setGUI(OthelloGUI gui) {

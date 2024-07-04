@@ -1,11 +1,14 @@
 package othello.view;
 
-import java.awt.*;
-import java.util.Arrays;
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-
+import othello.Main;
 import othello.Piece;
+import othello.model.BoardModel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.util.Arrays;
 
 
 public class BoardView extends JPanel {
@@ -17,22 +20,53 @@ public class BoardView extends JPanel {
 
 
     public BoardView(OthelloGUI gui, Piece[][] pieceFormation) {
-        setLayout(new BorderLayout());
+        setLayout(null);
 
         setBackground(new Color(139, 69, 19));
         gameBoard = new JPanel();
         gameBoard.setLayout(new GridLayout(8, 8, 3, 3));
-        gameBoard.setBackground(getBackground());
-        add(gameBoard, BorderLayout.CENTER);
-        addBorders();
+        gameBoard.setBackground(getBackground().darker());
+        add(gameBoard);
+        //addBorders();
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                redoGameBoardLayout();
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                redoGameBoardLayout();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        });
 
         initFields();
         setGUI(gui);
         setPieceFormation(pieceFormation);
 
-        //setLayout(new ProportionalLayout());
         addFields();
-        //setBorder(new LineBorder(new Color(139, 69, 19), 99999));
+    }
+
+    public void redoGameBoardLayout() {
+        int padding = 50;
+
+        if (getWidth() < getHeight()) {
+            gameBoard.setSize(getWidth() - padding * 2, getWidth() - padding * 2);
+            gameBoard.setLocation(padding, (getHeight() - gameBoard.getWidth()) / 2);
+        } else {
+            gameBoard.setSize(getHeight() - padding * 2, getHeight() - padding * 2);
+            gameBoard.setLocation((getWidth() - gameBoard.getHeight()) / 2, padding);
+        }
+
+        gameBoard.doLayout();
     }
 
     private static boolean checkPieceFormation(Piece[][] pieceFormation) {
@@ -60,18 +94,19 @@ public class BoardView extends JPanel {
     }
 
     private void updateFields() {
-        boolean[][] legalMoves = gui.getController().getModel().getLegalMoves();
+        BoardModel model = gui.getController().getModel();
+        model.updateLegalMoves();
+        boolean[][] legalMoves = model.getLegalMoves();
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
                 fields[i][j].setLegalMove(legalMoves[i][j]);
                 fields[i][j].setPiece(getPieceFormation()[i][j]);
-
             }
         }
     }
 
     private void addFields() {
-        //ProportionalLayout layout = (ProportionalLayout) this.getLayout();
+        //ProportionalLayout layout = (ProportionalLayout) gameBoard.getLayout();
         for (int y = 0; y < 8; ++y) {
             for (int x = 0; x < 8; ++x) {
                 //layout.addLayoutComponent(fields[x][y], x / 8.0f, y / 8.0f, 1 / 8.0f, 1 / 8.0f);
@@ -96,29 +131,5 @@ public class BoardView extends JPanel {
 
     public void fieldClicked(int xPosition, int yPosition) {
         gui.fieldClicked(xPosition, yPosition);
-    }
-
-    private void addBorders() {
-        Component[] borders = {
-                Box.createVerticalStrut(100),
-                Box.createHorizontalStrut(100),
-                Box.createVerticalStrut(100),
-                Box.createHorizontalStrut(100),
-        };
-
-        for (Component c : borders) {
-            c.setBackground(getBackground());
-        }
-
-        Object[] positions = {
-                BorderLayout.NORTH,
-                BorderLayout.EAST,
-                BorderLayout.SOUTH,
-                BorderLayout.WEST
-        };
-
-        for (int i = 0; i < 4; i++) {
-            add(borders[i], positions[i]);
-        }
     }
 }

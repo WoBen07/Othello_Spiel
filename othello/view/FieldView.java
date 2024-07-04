@@ -2,23 +2,22 @@ package othello.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.image.ColorConvertOp;
 
 import javax.swing.JButton;
-import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import othello.Piece;
 
 public class FieldView extends JButton {
 
+    public static final int WIDTH = 30;
     private static final Color backgroundColor = new Color(0, 128, 0);
     private static final Color legalMoveColor = new Color(0, 0, 255);
 
     private final int xPosition;
     private final int yPosition;
     private Piece piece;
-    private boolean isLegalMove = false;
+    private boolean isLegalMove;
 
     public FieldView(BoardView board, int xPosition, int yPosition, Piece piece) {
 
@@ -28,17 +27,14 @@ public class FieldView extends JButton {
 
         setPiece(piece);
 
-        setMinimumSize(new Dimension(100, 100));
-        setMaximumSize(new Dimension(100, 100));
-        setPreferredSize(new Dimension(100, 100));
+        setMinimumSize(new Dimension(WIDTH, WIDTH));
+        setMaximumSize(new Dimension(WIDTH, WIDTH));
+        setPreferredSize(new Dimension(WIDTH, WIDTH));
         setFocusable(false);
 
         setUI(BasicButtonUI.createUI(this));
 
-        addActionListener(e -> {
-            board.fieldClicked(getXPosition(), getYPosition());
-        });
-
+        addActionListener(_ -> board.fieldClicked(getXPosition(), getYPosition()));
     }
 
     public int getXPosition() {
@@ -51,10 +47,6 @@ public class FieldView extends JButton {
 
     public Piece getPiece() {
         return this.piece;
-    }
-
-    public void updateLegalMove(boolean isLegalMove) {
-        this.isLegalMove = isLegalMove;
     }
 
     public void setPiece(Piece piece) {

@@ -1,6 +1,7 @@
 package othello.view;
 
 import java.awt.*;
+import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -43,7 +44,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
     }
 
     private void clearFrame() {
-        components.forEach(c -> remove(c));
+        components.forEach(this::remove);
         components.clear();
     }
 
@@ -84,7 +85,7 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
         add(panel, BorderLayout.CENTER);
         components.add(panel);
 
-        setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);
         setVisible(true);
     }
 

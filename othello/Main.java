@@ -1,10 +1,12 @@
 package othello;
 
 import othello.controller.OthelloController;
+import othello.view.BoardView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 

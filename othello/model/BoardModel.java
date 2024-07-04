@@ -1,12 +1,11 @@
 package othello.model;
 
+import othello.Piece;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-
 import java.util.Arrays;
-
-import othello.Piece;
 
 public class BoardModel implements Serializable {
 
@@ -21,8 +20,6 @@ public class BoardModel implements Serializable {
     private boolean running = true;
 
     public BoardModel() {
-        //initFields();
-        //setPieceFormation(Piece.startFormation());
         this(Piece.startFormation(), true, false, true);
     }
 
@@ -67,9 +64,10 @@ public class BoardModel implements Serializable {
     }
 
     private void updateFields() {
+        var pieceFormation1 = getPieceFormation();
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
-                fields[i][j].setPiece(getPieceFormation()[i][j]);
+                fields[i][j].setPiece(pieceFormation1[i][j]);
             }
         }
     }
@@ -115,25 +113,26 @@ public class BoardModel implements Serializable {
 
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1},
                 {-1, -1}, {1, 1}, {-1, 1}, {1, -1}};
+        var pieceFormation1 = getPieceFormation();
 
         for (int[] direction : directions) {
             if (xNewPiece + direction[0] < 0 || xNewPiece + direction[0] >= 8
-                    || yNewPiece + direction[1] < 0
-                    || yNewPiece + direction[1] >= 8) {
+                || yNewPiece + direction[1] < 0
+                || yNewPiece + direction[1] >= 8) {
                 continue;
             }
 
             int x = xNewPiece + direction[0];
             int y = yNewPiece + direction[1];
 
-            if (getPieceFormation()[x][y]
+            if (pieceFormation1[x][y]
                     .equals(isDarksTurn() ? Piece.LIGHT : Piece.DARK)) {
 
                 while (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                    if (getPieceFormation()[x][y].equals(Piece.NONE)) {
+                    if (pieceFormation1[x][y].equals(Piece.NONE)) {
                         break;
                     }
-                    if (!getPieceFormation()[x][y]
+                    if (!pieceFormation1[x][y]
                             .equals(darksTurn ? Piece.DARK : Piece.LIGHT)) {
                         x += direction[0];
                         y += direction[1];
@@ -171,7 +170,7 @@ public class BoardModel implements Serializable {
         return Arrays.copyOf(legalMoves, legalMoves.length);
     }
 
-    private void updateLegalMoves() {
+    public void updateLegalMoves() {
         hasLegalMove = false;
 
         boolean[][] tempLegalMoves = new boolean[8][8];
