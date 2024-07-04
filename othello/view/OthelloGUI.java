@@ -11,7 +11,10 @@ import javax.swing.*;
 import othello.Piece;
 import othello.controller.OthelloController;
 
-@SuppressWarnings("serial")
+
+/**
+ * This class represents the game window
+ * */
 public class OthelloGUI extends JFrame implements PropertyChangeListener {
 
     private OthelloController controller;
@@ -154,5 +157,9 @@ public class OthelloGUI extends JFrame implements PropertyChangeListener {
             int[] scores = (int[]) evt.getNewValue();
             showEndScreen(scores[0], scores[1]);
         }
+    }
+
+    public OthelloController getController() {
+        return controller;
     }
 }

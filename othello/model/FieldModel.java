@@ -7,14 +7,14 @@ public class FieldModel {
     private Piece piece;
 
     public FieldModel(Piece piece) {
-	setPiece(piece);
+        setPiece(piece);
     }
 
     public Piece getPiece() {
-	return piece;
+        return piece;
     }
 
     public void setPiece(Piece piece) {
-	this.piece = piece;
+        this.piece = piece;
     }
 }
